@@ -1,59 +1,56 @@
 <script>
-import axios from "axios";
-import { ApiAddress } from "@/common.ts";
+import axios from 'axios';
+import { ApiAddress } from '@/common.ts';
 
 export default {
-  name: "new-account",
+  name: 'new-account-organization',
   data() {
     return {
       model: {
-        firstName: "",
-        lastName: "",
-        middleName: "",
-        email: "",
-        password: "",
-        phoneNumber: "",
-        birthDate: ""
+        name: '',
+        email: '',
+        password: '',
+        phoneNumber: '',
+        legalAddress: ''
       }
     }
   },
   methods: {
     async createAccount() {
       try {
-        let birthDateUTC = new Date(this.model.birthDate).toISOString();
-        const response = await axios.post(ApiAddress + 'api/register-volunteer', {
-          firstName: this.model.firstName,
+        const response = await axios.post(ApiAddress + 'api/register-organization', {
+          name: this.model.name,
           lastName: this.model.lastName,
           email: this.model.email,
           password: this.model.password,
           phoneNumber: this.model.phoneNumber,
-          birthDate: birthDateUTC
-        });
+          legalAddress: this.model.legalAddress
+        })
 
         // Успешный ответ
-        localStorage.removeItem("accessToken");
-        this.$toast.add({severity: 'success', summary: 'Успех', detail: 'Вы успешно зарегистрировались', life: 3000});
-        console.log(response.data);
+        localStorage.removeItem('accessToken')
+        this.$toast.add({severity: 'success', summary: 'Успех', detail: 'Вы успешно зарегистрировались', life: 3000})
+        console.log(response.data)
       } catch (error) {
         // Ошибка запроса
         if (error.response) {
           // Сервер вернул ответ с ошибкой
-          console.error("Response error:", error.response.data);
-          this.$toast.add({severity: 'error', summary: 'Ошибка', detail: error.response.data.message || 'Не удалось создать аккаунт', life: 3000});
+          console.error('Response error:', error.response.data)
+          this.$toast.add({severity: 'error', summary: 'Ошибка', detail: error.response.data.message || 'Не удалось создать аккаунт', life: 3000})
         } else {
           // Ошибка сети или другая ошибка
-          console.error("Network error:", error.message);
-          this.$toast.add({severity: 'error', summary: 'Ошибка', detail: 'Ошибка сети, попробуйте еще раз', life: 3000});
+          console.error('Network error:', error.message)
+          this.$toast.add({severity: 'error', summary: 'Ошибка', detail: 'Ошибка сети, попробуйте еще раз', life: 3000})
         }
       }
     }
   }
-};
+}
 </script>
 
 
 <template>
-  <div class="registration-for-volunteers">
+  <div class="registration-for">
     <div class="navbar">
       <div class="content">
         <div class="navigation">
@@ -70,78 +67,66 @@ export default {
           <div class="log-in">
             <button class="button">Войти</button>
           </div>
-          <button class="sign-up" type="button">Регистрация организации</button>
+          <button class="sign-up" type="button">Регистрация волонтера</button>
         </div>
       </div>
     </div>
     <div class="row no-gutters w-100 h-100">
       <div class="col-md-6 d-flex justify-content-center align-items-center">
         <div class="form-container">
-          <div class="reg-title">
-            <div class="reg-title-content">
-              <div class="heading">Регистрация волонтера</div>
-              <p class="text">Начни творить добро прямо сейчас!</p>
-            </div>
+          <div class="reg-title-o">
+              <div class="heading">Регистрация организатора</div>
           </div>
-          <form @submit.prevent="createAccount" class="reg-form-v">
-            <div class="inputs">
-              <div class="div">
-                <div class="text-wrapper">Фамилия</div>
-                <input
-                  class="form-control"
-                  type="text"
-                  v-model="model.lastName"
-                >
+            <form @submit.prevent="createAccount" class="reg-form-o">
+              <div class="inputs">
+                  <div class="div">
+                    <div class="text-wrapper">Название организации</div>
+                    <input
+                      class="form-control"
+                      type="text"
+                      v-model="model.name"
+                    >
+                  </div>
+                  <div class="div">
+                    <div class="text-wrapper">Юридический адрес</div>
+                    <input
+                      class="form-control"
+                      type="text"
+                      v-model="model.legalAddress"
+                    >
+                  </div>
+                  <div class="div">
+                    <div class="text-wrapper">Электронная почта</div>
+                    <input
+                      class="form-control"
+                      type="email"
+                      v-model="model.email"
+                    >
+                  </div>
+                  <div class="div">
+                    <div class="text-wrapper">Телефон</div>
+                    <input
+                      class="form-control"
+                      type="tel"
+                      v-model="model.phoneNumber"
+                    >
+                  </div>
+                <div class="div">
+                  <div class="text-wrapper">Пароль</div>
+                  <input
+                    class="form-control"
+                    type="password"
+                    v-model="model.password"
+                  >
+                </div>
               </div>
-              <div class="div">
-                <div class="text-wrapper">Имя</div>
-                <input
-                  class="form-control"
-                  type="text"
-                  v-model="model.firstName"
-                >
-              </div>
-              <div class="div">
-                <div class="text-wrapper">Дата рождения</div>
-                <input
-                  class="form-control"
-                  type="date"
-                  v-model="model.birthDate"
-                >
-              </div>
-              <div class="div">
-                <div class="text-wrapper">Номер телефона</div>
-                <input
-                  class="form-control"
-                  type="tel"
-                  v-model="model.phoneNumber"
-                >
-              </div>
-            </div>
-            <div class="div">
-              <div class="text-wrapper">Электронная почта</div>
-              <input
-                class="form-control"
-                type="email"
-                placeholder="name@example.com"
-                v-model="model.email"
-              >
-            </div>
-            <div class="div">
-              <div class="text-wrapper">Пароль</div>
-              <input
-                class="form-control"
-                type="password"
-                v-model="model.password"
-              >
-            </div>
-            <button class="end-reg-button-v" type="submit">Зарегистрироваться</button>
+              <button class="end-reg-button-o" type="submit">Зарегистрировать организацию</button>
           </form>
         </div>
       </div>
       <div class="col-md-6 d-flex justify-content-center align-items-center">
         <div class="image-container">
-          <img alt="vol-reg-picture" src="/vol-reg-picture.png"/>
+          <img alt="org-reg-picture.png" src="/org-reg-picture.png" />
         </div>
       </div>
     </div>
@@ -150,41 +135,54 @@ export default {
 
 
 <style>
-.registration-for-volunteers {
+.registration-for {
   align-items: flex-start;
   background-color: #F5F5F5;
   display: flex;
   flex-direction: column;
   gap: 30px;
-  padding: 10px 24px;
+  padding: 90px 64px;
   position: absolute;
   top: 0;
+  bottom: 0;
   left: 0;
   width: 100%;
   height: 100%;
 }
 
-.registration-for-volunteers .reg-title {
+.registration-for .inputs {
   align-items: center;
   display: flex;
   flex: 0 0 auto;
   flex-direction: column;
-  gap: 16px;
+  gap: 24px;
+  justify-content: center;
   position: relative;
   width: 650px;
+  margin-bottom: 24px;
 }
 
-.registration-for-volunteers .reg-title-content {
+.registration-for .div {
   align-items: flex-start;
   align-self: stretch;
   display: flex;
   flex: 0 0 auto;
   flex-direction: column;
-  gap: 15px;
+  gap: 10px;
   position: relative;
 }
 
-.registration-for-volunteers .heading {
+.registration-for .reg-title-o {
+  align-items: flex-start;
+  display: inline-flex;
+  flex: 0 0 auto;
+  flex-direction: column;
+  gap: 16px;
+  position: relative;
+  margin-bottom: 34px;
+}
+
+.registration-for .heading {
   align-self: stretch;
   color: #333333;
   font-family: sans-serif;
@@ -195,71 +193,29 @@ export default {
   line-height: normal;
   margin-top: 0;
   position: relative;
-  text-align: center;
+  width: 650px;
 }
 
-.registration-for-volunteers .text {
+.registration-for .text-wrapper {
   align-self: stretch;
-  color: #5C5C5C;
+  color: #333333;
   font-family: sans-serif;
   font-size: 18px;
   font-style: normal;
   font-weight: normal;
   letter-spacing: normal;
   line-height: normal;
+  margin-top: 0;
   position: relative;
-  text-align: center;
+  text-align: left;
 }
 
-.registration-for-volunteers .reg-form-v {
-  align-items: center;
-  display: inline-flex;
-  flex: 0 0 auto;
-  flex-direction: column;
-  gap: 24px;
-  position: relative;
-}
-
-.registration-for-volunteers .inputs {
-  align-items: center;
-  display: flex;
-  flex: 0 0 auto;
-  flex-direction: column;
-  gap: 24px;
-  justify-content: center;
-  position: relative;
-  width: 650px;
-}
-
-.registration-for-volunteers .div {
-  align-items: flex-start;
-  align-self: stretch;
-  display: flex;
-  flex: 0 0 auto;
-  flex-direction: column;
-  gap: 8px;
-  position: relative;
-  width: 100%;
-}
-
-.registration-for-volunteers .text-wrapper {
-  align-self: stretch;
-  color: #333333;
-  font-family: sans-serif;
-  font-size: 16px;
-  font-style: normal;
-  font-weight: normal;
-  letter-spacing: normal;
-  line-height: normal;
-  margin-top: -1px;
-  position: relative;
-}
-
-.registration-for-volunteers .end-reg-button-v {
+.registration-for .end-reg-button-o {
   align-items: center;
   align-self: stretch;
   background-color: #FF4081;
   border-radius: 10px;
+  border: 0;
   box-shadow: 0 4px 4px #00000040;
   display: flex;
   flex: 0 0 auto;
@@ -269,15 +225,12 @@ export default {
   padding: 12px 24px;
   position: relative;
   width: 100%;
-  color: #F5F5F5;
-  font-family: sans-serif;
-  font-size: 16px;
+  color: #F5F5F5;font-family: sans-serif;
+  font-size: 18px;
   font-weight: 400;
   letter-spacing: 0;
   line-height: 24px;
   white-space: nowrap;
-  outline: none;
-  border: 0;
 }
 
 .image-container img

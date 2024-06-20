@@ -3,22 +3,17 @@ import axios from "axios";
 import { ApiAddress } from "@/common.ts";
 
 export default {
-  name: "new-account",
+  name: "authorization",
   data() {
     return {
       model: {
-        firstName: "",
-        lastName: "",
-        middleName: "",
         email: "",
-        password: "",
-        phoneNumber: "",
-        birthDate: ""
+        password: ""
       }
     }
   },
   methods: {
-    async createAccount() {
+    async authorizeAccount() {
       try {
         let birthDateUTC = new Date(this.model.birthDate).toISOString();
         const response = await axios.post(ApiAddress + 'api/register-volunteer', {
@@ -53,7 +48,7 @@ export default {
 
 
 <template>
-  <div class="registration-for-volunteers">
+  <div class="authorization">
     <div class="navbar">
       <div class="content">
         <div class="navigation">
@@ -77,71 +72,39 @@ export default {
     <div class="row no-gutters w-100 h-100">
       <div class="col-md-6 d-flex justify-content-center align-items-center">
         <div class="form-container">
-          <div class="reg-title">
-            <div class="reg-title-content">
-              <div class="heading">Регистрация волонтера</div>
-              <p class="text">Начни творить добро прямо сейчас!</p>
+          <div class="auth-title">
+            <div class="auth-title-content">
+              <div class="heading">Вход</div>
+              <p class="text">Ещё нет аккаунта? <a class="link-opacity-50" href="#">Зарегистрироваться</a></p>
             </div>
           </div>
-          <form @submit.prevent="createAccount" class="reg-form-v">
+          <form @submit.prevent="authorizeAccount" class="auth-form-v">
             <div class="inputs">
               <div class="div">
-                <div class="text-wrapper">Фамилия</div>
+                <div class="text-wrapper">Электронная почта</div>
                 <input
                   class="form-control"
-                  type="text"
-                  v-model="model.lastName"
+                  type="email"
+                  placeholder="name@example.com"
+                  v-model="model.email"
                 >
               </div>
               <div class="div">
-                <div class="text-wrapper">Имя</div>
+                <div class="text-wrapper">Пароль</div>
                 <input
                   class="form-control"
-                  type="text"
-                  v-model="model.firstName"
-                >
-              </div>
-              <div class="div">
-                <div class="text-wrapper">Дата рождения</div>
-                <input
-                  class="form-control"
-                  type="date"
-                  v-model="model.birthDate"
-                >
-              </div>
-              <div class="div">
-                <div class="text-wrapper">Номер телефона</div>
-                <input
-                  class="form-control"
-                  type="tel"
-                  v-model="model.phoneNumber"
+                  type="password"
+                  v-model="model.password"
                 >
               </div>
             </div>
-            <div class="div">
-              <div class="text-wrapper">Электронная почта</div>
-              <input
-                class="form-control"
-                type="email"
-                placeholder="name@example.com"
-                v-model="model.email"
-              >
-            </div>
-            <div class="div">
-              <div class="text-wrapper">Пароль</div>
-              <input
-                class="form-control"
-                type="password"
-                v-model="model.password"
-              >
-            </div>
-            <button class="end-reg-button-v" type="submit">Зарегистрироваться</button>
+            <button class="end-auth-button-v" type="submit">Войти</button>
           </form>
         </div>
       </div>
       <div class="col-md-6 d-flex justify-content-center align-items-center">
         <div class="image-container">
-          <img alt="vol-reg-picture" src="/vol-reg-picture.png"/>
+          <img alt="vol-reg-picture" src="/authorization-picture.png"/>
         </div>
       </div>
     </div>
@@ -150,7 +113,7 @@ export default {
 
 
 <style>
-.registration-for-volunteers {
+.authorization {
   align-items: flex-start;
   background-color: #F5F5F5;
   display: flex;
@@ -164,7 +127,7 @@ export default {
   height: 100%;
 }
 
-.registration-for-volunteers .reg-title {
+.authorization .auth-title {
   align-items: center;
   display: flex;
   flex: 0 0 auto;
@@ -174,7 +137,7 @@ export default {
   width: 650px;
 }
 
-.registration-for-volunteers .reg-title-content {
+.authorization .auth-title-content {
   align-items: flex-start;
   align-self: stretch;
   display: flex;
@@ -182,9 +145,10 @@ export default {
   flex-direction: column;
   gap: 15px;
   position: relative;
+  margin-bottom: 15px;
 }
 
-.registration-for-volunteers .heading {
+.authorization .heading {
   align-self: stretch;
   color: #333333;
   font-family: sans-serif;
@@ -198,7 +162,7 @@ export default {
   text-align: center;
 }
 
-.registration-for-volunteers .text {
+.authorization .text {
   align-self: stretch;
   color: #5C5C5C;
   font-family: sans-serif;
@@ -211,7 +175,7 @@ export default {
   text-align: center;
 }
 
-.registration-for-volunteers .reg-form-v {
+.authorization .auth-form-v {
   align-items: center;
   display: inline-flex;
   flex: 0 0 auto;
@@ -220,7 +184,7 @@ export default {
   position: relative;
 }
 
-.registration-for-volunteers .inputs {
+.authorization .inputs {
   align-items: center;
   display: flex;
   flex: 0 0 auto;
@@ -231,22 +195,22 @@ export default {
   width: 650px;
 }
 
-.registration-for-volunteers .div {
+.authorization .div {
   align-items: flex-start;
   align-self: stretch;
   display: flex;
   flex: 0 0 auto;
   flex-direction: column;
-  gap: 8px;
+  gap: 10px;
   position: relative;
   width: 100%;
 }
 
-.registration-for-volunteers .text-wrapper {
+.authorization .text-wrapper {
   align-self: stretch;
   color: #333333;
   font-family: sans-serif;
-  font-size: 16px;
+  font-size: 18px;
   font-style: normal;
   font-weight: normal;
   letter-spacing: normal;
@@ -255,7 +219,7 @@ export default {
   position: relative;
 }
 
-.registration-for-volunteers .end-reg-button-v {
+.authorization .end-auth-button-v {
   align-items: center;
   align-self: stretch;
   background-color: #FF4081;
@@ -271,13 +235,14 @@ export default {
   width: 100%;
   color: #F5F5F5;
   font-family: sans-serif;
-  font-size: 16px;
+  font-size: 18px;
   font-weight: 400;
   letter-spacing: 0;
   line-height: 24px;
   white-space: nowrap;
   outline: none;
   border: 0;
+  margin-top: 20px;
 }
 
 .image-container img
