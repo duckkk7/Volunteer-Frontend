@@ -76,7 +76,7 @@ export default {
           <div class="auth-title">
             <div class="auth-title-content">
               <div class="heading">Вход</div>
-              <p class="text">Ещё нет аккаунта? <a class="link-opacity-50" href="#">Зарегистрироваться</a></p>
+              <p class="text">Ещё нет аккаунта? <a class="link-opacity-50" href="#" @click="$router.push('/register')">Зарегистрироваться</a></p>
             </div>
           </div>
           <form @submit.prevent="authorizeAccount" class="auth-form-v">
