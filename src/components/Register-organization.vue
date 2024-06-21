@@ -65,9 +65,9 @@ export default {
         </div>
         <div class="actions">
           <div class="log-in">
-            <button class="button">Войти</button>
+            <button class="button" @click="$router.push('/login')">Войти</button>
           </div>
-          <button class="sign-up" type="button">Регистрация волонтера</button>
+          <button class="sign-up" type="button" @click="$router.push('/register')">Регистрация волонтера</button>
         </div>
       </div>
     </div>
