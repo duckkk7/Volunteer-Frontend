@@ -1,22 +1,39 @@
-import Vue from 'vue';
-import VueRouter from 'vue-router';
-import routes from './routes';
+import { createRouter, createWebHistory } from 'vue-router';
+import Authorization from '@/components/Authorization.vue'
+import Register from '@/components/Register.vue';
+import RegisterOrganization from '@/components/Register-organization.vue'
 
-Vue.use(VueRouter);
+const routes = [
+  // {
+  //   path: '/',
+  //   name: 'home',
+  //   component: Home
+  // },
+  {
+    path: '/login',
+    name: 'login',
+    component: Authorization
+  },
+  {
+    path: '/register',
+    name: 'register',
+    component: Register
+  },
+  {
+    path: '/register/organization',
+    name: 'register-organization',
+    component: RegisterOrganization
+  },
+  // {
+  //   path: '/volunteer-profile',
+  //   name: 'volunteer-profile',
+  //   component: VolunteerProfile
+  // }
+]
 
-// configure router
-const router = new VueRouter({
-  routes, // short for routes: routes
-  linkActiveClass: 'active',
-  scrollBehavior: (to, from ,savedPosition) => {
-    if (savedPosition) {
-      return savedPosition;
-    }
-    if (to.hash) {
-      return { selector: to.hash };
-    }
-    return { x: 0, y: 0 };
-  }
-});
+const router = createRouter({
+  history: createWebHistory(),
+  routes
+})
 
 export default router;

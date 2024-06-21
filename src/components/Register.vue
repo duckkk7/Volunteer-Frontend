@@ -1,9 +1,18 @@
 <script>
 import axios from "axios";
 import { ApiAddress } from "@/common.ts";
+import { useVuelidate } from '@vuelidate/core'
+import { required, email, minLength } from '@vuelidate/validators'
+
 
 export default {
   name: "new-account",
+  setup () {
+    return {
+      v$: useVuelidate()
+    }
+  },
+
   data() {
     return {
       model: {
@@ -17,6 +26,17 @@ export default {
       }
     }
   },
+
+  validations() {
+    return {
+      firstName: { required },
+      lastName: { required },
+      email: { required, email },
+      password : { required, minLength: minLength(7)},
+      birthDate: { required }
+      }
+    },
+
   methods: {
     async createAccount() {
       try {
@@ -46,6 +66,10 @@ export default {
           this.$toast.add({severity: 'error', summary: 'Ошибка', detail: 'Ошибка сети, попробуйте еще раз', life: 3000});
         }
       }
+    },
+
+    checkForm() {
+      console.log('something about you')
     }
   }
 };
@@ -90,7 +114,7 @@ export default {
                 <input
                   class="form-control"
                   type="text"
-                  v-model="model.lastName"
+                  v-model.trim="model.lastName"
                 >
               </div>
               <div class="div">
@@ -135,7 +159,7 @@ export default {
                 v-model="model.password"
               >
             </div>
-            <button class="end-reg-button-v" type="submit">Зарегистрироваться</button>
+            <button @click="checkForm" class="end-reg-button-v" type="submit">Зарегистрироваться</button>
           </form>
         </div>
       </div>
