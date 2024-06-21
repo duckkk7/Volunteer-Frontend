@@ -1,6 +1,6 @@
 <script>
-import axios from 'axios';
-import { ApiAddress } from '@/common.ts';
+import axios from 'axios'
+import { ApiAddress } from '@/common.ts'
 
 export default {
   name: 'new-account-organization',
@@ -29,18 +29,33 @@ export default {
 
         // Успешный ответ
         localStorage.removeItem('accessToken')
-        this.$toast.add({severity: 'success', summary: 'Успех', detail: 'Вы успешно зарегистрировались', life: 3000})
+        this.$toast.add({
+          severity: 'success',
+          summary: 'Успех',
+          detail: 'Вы успешно зарегистрировались',
+          life: 3000
+        })
         console.log(response.data)
       } catch (error) {
         // Ошибка запроса
         if (error.response) {
           // Сервер вернул ответ с ошибкой
           console.error('Response error:', error.response.data)
-          this.$toast.add({severity: 'error', summary: 'Ошибка', detail: error.response.data.message || 'Не удалось создать аккаунт', life: 3000})
+          this.$toast.add({
+            severity: 'error',
+            summary: 'Ошибка',
+            detail: error.response.data.message || 'Не удалось создать аккаунт',
+            life: 3000
+          })
         } else {
           // Ошибка сети или другая ошибка
           console.error('Network error:', error.message)
-          this.$toast.add({severity: 'error', summary: 'Ошибка', detail: 'Ошибка сети, попробуйте еще раз', life: 3000})
+          this.$toast.add({
+            severity: 'error',
+            summary: 'Ошибка',
+            detail: 'Ошибка сети, попробуйте еще раз',
+            life: 3000
+          })
         }
       }
     }
@@ -48,17 +63,17 @@ export default {
 }
 </script>
 
-
 <template>
   <div class="registration-for">
-    <div class="navbar">
+    <!-- <div class="navbar">
       <div class="content">
         <div class="navigation">
           <div class="button">О нас</div>
           <div class="button">Волонтерам</div>
           <div class="button">Мероприятия</div>
           <div class="more">
-            <div class="button">Еще
+            <div class="button">
+              Еще
               <img class="chevron-down" alt="Chevron down" src="/chevrondown1046-9o3i.svg" />
             </div>
           </div>
@@ -67,60 +82,42 @@ export default {
           <div class="log-in">
             <button class="button" @click="$router.push('/login')">Войти</button>
           </div>
-          <button class="sign-up" type="button" @click="$router.push('/register')">Регистрация волонтера</button>
+          <button class="sign-up" type="button" @click="$router.push('/register')">
+            Регистрация волонтера
+          </button>
         </div>
       </div>
-    </div>
+    </div> -->
     <div class="row no-gutters w-100 h-100">
       <div class="col-md-6 d-flex justify-content-center align-items-center">
         <div class="form-container">
           <div class="reg-title-o">
-              <div class="heading">Регистрация организатора</div>
+            <div class="heading">Регистрация организатора</div>
           </div>
-            <form @submit.prevent="createAccount" class="reg-form-o">
-              <div class="inputs">
-                  <div class="div">
-                    <div class="text-wrapper">Название организации</div>
-                    <input
-                      class="form-control"
-                      type="text"
-                      v-model="model.name"
-                    >
-                  </div>
-                  <div class="div">
-                    <div class="text-wrapper">Юридический адрес</div>
-                    <input
-                      class="form-control"
-                      type="text"
-                      v-model="model.legalAddress"
-                    >
-                  </div>
-                  <div class="div">
-                    <div class="text-wrapper">Электронная почта</div>
-                    <input
-                      class="form-control"
-                      type="email"
-                      v-model="model.email"
-                    >
-                  </div>
-                  <div class="div">
-                    <div class="text-wrapper">Телефон</div>
-                    <input
-                      class="form-control"
-                      type="tel"
-                      v-model="model.phoneNumber"
-                    >
-                  </div>
-                <div class="div">
-                  <div class="text-wrapper">Пароль</div>
-                  <input
-                    class="form-control"
-                    type="password"
-                    v-model="model.password"
-                  >
-                </div>
+          <form @submit.prevent="createAccount" class="reg-form-o">
+            <div class="inputs">
+              <div class="div">
+                <div class="text-wrapper">Название организации</div>
+                <input class="form-control" type="text" v-model="model.name" />
               </div>
-              <button class="end-reg-button-o" type="submit">Зарегистрировать организацию</button>
+              <div class="div">
+                <div class="text-wrapper">Юридический адрес</div>
+                <input class="form-control" type="text" v-model="model.legalAddress" />
+              </div>
+              <div class="div">
+                <div class="text-wrapper">Электронная почта</div>
+                <input class="form-control" type="email" v-model="model.email" />
+              </div>
+              <div class="div">
+                <div class="text-wrapper">Телефон</div>
+                <input class="form-control" type="tel" v-model="model.phoneNumber" />
+              </div>
+              <div class="div">
+                <div class="text-wrapper">Пароль</div>
+                <input class="form-control" type="password" v-model="model.password" />
+              </div>
+            </div>
+            <button class="end-reg-button-o" type="submit">Зарегистрировать организацию</button>
           </form>
         </div>
       </div>
@@ -133,15 +130,15 @@ export default {
   </div>
 </template>
 
-
 <style>
 .registration-for {
   align-items: flex-start;
-  background-color: #F5F5F5;
+  background-color: #f5f5f5;
   display: flex;
   flex-direction: column;
   gap: 30px;
   padding: 90px 64px;
+  margin-top: auto;
   position: absolute;
   top: 0;
   bottom: 0;
@@ -213,7 +210,7 @@ export default {
 .registration-for .end-reg-button-o {
   align-items: center;
   align-self: stretch;
-  background-color: #FF4081;
+  background-color: #ff4081;
   border-radius: 10px;
   border: 0;
   box-shadow: 0 4px 4px #00000040;
@@ -225,7 +222,8 @@ export default {
   padding: 12px 24px;
   position: relative;
   width: 100%;
-  color: #F5F5F5;font-family: sans-serif;
+  color: #f5f5f5;
+  font-family: sans-serif;
   font-size: 18px;
   font-weight: 400;
   letter-spacing: 0;
@@ -233,8 +231,7 @@ export default {
   white-space: nowrap;
 }
 
-.image-container img
-{
+.image-container img {
   width: 100%;
   height: 700px;
   object-fit: contain;
@@ -242,7 +239,7 @@ export default {
 
 .navbar {
   align-items: center;
-  background-color: #F5F5F5;
+  background-color: #f5f5f5;
   display: flex;
   flex-direction: column;
   position: absolute;
@@ -254,7 +251,7 @@ export default {
 .navbar .content {
   align-items: center;
   align-self: stretch;
-  background-color: #F5F5F5;
+  background-color: #f5f5f5;
   box-shadow: 0 4px 4px #00000040;
   display: flex;
   height: 72px;
@@ -313,7 +310,7 @@ export default {
 
 .navbar .log-in {
   align-items: center;
-  background-color: #F5F5F5;
+  background-color: #f5f5f5;
   border-radius: 10px;
   display: inline-flex;
   flex: 0 0 auto;
@@ -339,14 +336,14 @@ export default {
 }
 
 .navbar .sign-up:hover {
-  background-color: #FF4081;
-  color: #F5F5F5;
+  background-color: #ff4081;
+  color: #f5f5f5;
 }
 
 .navbar .sign-up {
   align-items: center;
   border: 1px solid;
-  border-color: #FF4081;
+  border-color: #ff4081;
   border-radius: 10px;
   box-shadow: 0 4px 4px #00000040;
   display: inline-flex;
@@ -362,5 +359,4 @@ export default {
   font-size: 18px;
   font-family: sans-serif;
 }
-
 </style>

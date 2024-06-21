@@ -1,7 +1,8 @@
-import { createRouter, createWebHistory } from 'vue-router';
+import { createRouter, createWebHistory } from 'vue-router'
 import Authorization from '@/components/Authorization.vue'
-import Register from '@/components/Register.vue';
+import Register from '@/components/Register.vue'
 import RegisterOrganization from '@/components/Register-organization.vue'
+import VolunteerProfile from '@/components/VolunteerProfile.vue'
 
 const routes = [
   // {
@@ -24,11 +25,11 @@ const routes = [
     name: 'register-organization',
     component: RegisterOrganization
   },
-  // {
-  //   path: '/volunteer-profile',
-  //   name: 'volunteer-profile',
-  //   component: VolunteerProfile
-  // }
+  {
+    path: '/volunteer-profile',
+    name: 'volunteer-profile',
+    component: VolunteerProfile
+  }
 ]
 
 const router = createRouter({
@@ -36,4 +37,4 @@ const router = createRouter({
   routes
 })
 
-export default router;
+export default router
