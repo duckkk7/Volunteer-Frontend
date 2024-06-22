@@ -1,17 +1,118 @@
+<template>
+  <div class="event-reg-container">
+    <div class="navbar">
+      <div class="content">
+        <div class="navigation">
+          <div class="button">О нас</div>
+          <div class="button">Волонтерам</div>
+          <div class="button">Мероприятия</div>
+          <div class="more">
+            <div class="button">Еще
+              <img class="chevron-down" alt="Chevron down" src="/chevrondown1046-9o3i.svg" />
+            </div>
+          </div>
+        </div>
+        <div class="actions">
+          <div class="log-in">
+            <button class="button" @click="$router.push('/login')">Войти</button>
+          </div>
+          <button class="sign-up" type="button" @click="$router.push('/register')">Регистрация волонтера</button>
+        </div>
+      </div>
+    </div>
+    <div class="row no-gutters w-100 h-100">
+
+      <div class="col-md-2 d-flex flex-row align-items-center">
+        <div class="image-container">
+          <img src="/event-reg-picture2.png" alt="event-reg-picture2">
+        </div>
+      </div>
+
+      <div class="col-md-6 d-flex justify-content-center align-items-center">
+        <div class="event-reg-event-registration">
+          <div class="event-reg-section-title">
+            <div class="heading">Публикация события</div>
+            <p class="text">Расскажите о Вашей идее всему миру!</p>
+          </div>
+
+          <form class="event-reg-form">
+
+            <div class="event-reg-input">
+              <div class="text-wrapper">Название</div>
+              <input
+                class="form-control"
+                type="text"
+                v-model="model.title"
+              >
+            </div>
+
+
+            <div class="event-reg-input">
+              <div class="text-wrapper">Город проведения</div>
+              <input
+                class="form-control"
+                type="text"
+                v-model="model.city"
+              >
+            </div>
+
+            <div class="event-reg-inputs">
+
+              <div class="event-reg-input2">
+                  <div class="text-wrapper">Дата и время начала</div>
+                <input
+                  class="form-control"
+                  type="datetime-local"
+                  v-model="model.startDate"
+                >
+              </div>
+              <div class="event-reg-input2">
+                <div class="text-wrapper">Дата и время завершения</div>
+                <input
+                  class="form-control"
+                  type="datetime-local"
+                  v-model="model.endDate"
+                >
+              </div>
+
+            </div>
+
+
+            <div class="event-reg-input">
+              <div class="text-wrapper">Описание</div>
+              <textarea class="form-control" rows="3" v-model="model.description"></textarea>
+            </div>
+
+            <button class="publish-button">Опубликовать</button>
+
+          </form>
+        </div>
+      </div>
+
+      <div class="col-md-2 d-flex flex-row-reverse align-items-center">
+        <div class="image-container">
+          <img src="/event-reg-picture1.png" alt="event-reg-picture1">
+        </div>
+      </div>
+
+    </div>
+  </div>
+</template>
+
 <script>
 import axios from 'axios';
 import { ApiAddress } from '@/common.ts';
 
 export default {
-  name: 'new-account-organization',
+  name: 'new-event',
   data() {
     return {
       model: {
-        name: '',
-        email: '',
-        password: '',
-        phoneNumber: '',
-        legalAddress: ''
+        title: '',
+        startDate: null,
+        endDate: null,
+        city: '',
+        description: ''
       }
     }
   },
@@ -48,141 +149,42 @@ export default {
 }
 </script>
 
-
-<template>
-  <div class="registration-for">
-    <div class="navbar">
-      <div class="content">
-        <div class="navigation">
-          <div class="button">О нас</div>
-          <div class="button">Волонтерам</div>
-          <div class="button">Мероприятия</div>
-          <div class="more">
-            <div class="button">Еще
-              <img class="chevron-down" alt="Chevron down" src="/chevrondown1046-9o3i.svg" />
-            </div>
-          </div>
-        </div>
-        <div class="actions">
-          <div class="log-in">
-            <button class="button" @click="$router.push('/login')">Войти</button>
-          </div>
-          <button class="sign-up" type="button" @click="$router.push('/register')">Регистрация волонтера</button>
-        </div>
-      </div>
-    </div>
-    <div class="row no-gutters w-100 h-100">
-      <div class="col-md-6 d-flex justify-content-center align-items-center">
-        <div class="form-container">
-          <div class="reg-title-o">
-              <div class="heading">Регистрация организатора</div>
-          </div>
-            <form @submit.prevent="createAccount" class="reg-form-o">
-              <div class="inputs">
-                  <div class="div">
-                    <div class="text-wrapper">Название организации</div>
-                    <input
-                      class="form-control"
-                      type="text"
-                      v-model="model.name"
-                    >
-                  </div>
-                  <div class="div">
-                    <div class="text-wrapper">Юридический адрес</div>
-                    <input
-                      class="form-control"
-                      type="text"
-                      v-model="model.legalAddress"
-                    >
-                  </div>
-                  <div class="div">
-                    <div class="text-wrapper">Электронная почта</div>
-                    <input
-                      class="form-control"
-                      type="email"
-                      v-model="model.email"
-                    >
-                  </div>
-                  <div class="div">
-                    <div class="text-wrapper">Телефон</div>
-                    <input
-                      class="form-control"
-                      type="tel"
-                      v-model="model.phoneNumber"
-                    >
-                  </div>
-                <div class="div">
-                  <div class="text-wrapper">Пароль</div>
-                  <input
-                    class="form-control"
-                    type="password"
-                    v-model="model.password"
-                  >
-                </div>
-              </div>
-              <button class="end-reg-button-o" type="submit">Зарегистрировать организацию</button>
-          </form>
-        </div>
-      </div>
-      <div class="col-md-6 d-flex justify-content-center align-items-center">
-        <div class="image-container">
-          <img alt="org-reg-picture.png" src="/org-reg-picture.png" />
-        </div>
-      </div>
-    </div>
-  </div>
-</template>
-
-
-<style>
-.registration-for {
-  align-items: flex-start;
-  background-color: #F5F5F5;
+<style scoped>
+.event-reg-container {
+  width: 100%;
   display: flex;
+  min-height: 100vh;
+  align-items: center;
   flex-direction: column;
-  gap: 30px;
-  padding: 90px 64px;
   position: absolute;
   top: 0;
-  bottom: 0;
   left: 0;
+  background-color: #F5F5F5;
+}
+
+.event-reg-event-registration {
+  gap: 48px;
   width: 100%;
   height: 100%;
-}
-
-.registration-for .inputs {
+  display: flex;
+  padding: 112px 64px;
+  overflow: hidden;
   align-items: center;
-  display: flex;
-  flex: 0 0 auto;
+  flex-shrink: 0;
   flex-direction: column;
-  gap: 24px;
-  justify-content: center;
-  position: relative;
-  width: 650px;
-  margin-bottom: 24px;
+  margin-top: 64px;
 }
 
-.registration-for .div {
-  align-items: flex-start;
-  align-self: stretch;
-  display: flex;
-  flex: 0 0 auto;
-  flex-direction: column;
-  gap: 10px;
-  position: relative;
-}
-
-.registration-for .reg-title-o {
-  align-items: flex-start;
-  display: inline-flex;
-  flex: 0 0 auto;
-  flex-direction: column;
+.event-reg-section-title {
   gap: 16px;
-  position: relative;
-  margin-bottom: 34px;
+  width: 768px;
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  flex-direction: column;
 }
 
-.registration-for .heading {
+.event-reg-section-title .heading {
   align-self: stretch;
   color: #333333;
   font-family: sans-serif;
@@ -193,10 +195,34 @@ export default {
   line-height: normal;
   margin-top: 0;
   position: relative;
-  width: 650px;
+  text-align: center;
 }
 
-.registration-for .text-wrapper {
+.event-reg-section-title .text {
+  align-self: stretch;
+  color: #5C5C5C;
+  font-family: sans-serif;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: normal;
+  letter-spacing: normal;
+  line-height: normal;
+  position: relative;
+  text-align: center;
+}
+
+
+.event-reg-form {
+  gap: 34px;
+  width: 643px;
+  display: flex;
+  z-index: 1;
+  align-items: center;
+  flex-shrink: 0;
+  flex-direction: column;
+}
+
+.event-reg-form .text-wrapper {
   align-self: stretch;
   color: #333333;
   font-family: sans-serif;
@@ -210,7 +236,7 @@ export default {
   text-align: left;
 }
 
-.registration-for .end-reg-button-o {
+.event-reg-form .publish-button{
   align-items: center;
   align-self: stretch;
   background-color: #FF4081;
@@ -234,13 +260,39 @@ export default {
   white-space: nowrap;
 }
 
+.event-reg-inputs {
+  gap: 24px;
+  display: flex;
+  align-self: stretch;
+  align-items: flex-start;
+  flex-shrink: 0;
+}
+.event-reg-input {
+  gap: 8px;
+  width: 643px;
+  display: flex;
+  flex-grow: 1;
+  align-items: flex-start;
+  flex-shrink: 0;
+  flex-direction: column;
+}
+
+.event-reg-input2 {
+  gap: 8px;
+  width: 309.5px;
+  display: flex;
+  flex-grow: 1;
+  align-items: flex-start;
+  flex-shrink: 0;
+  flex-direction: column;
+}
+
 .image-container img
 {
-  width: 100%;
+  width: 500px;
   height: 700px;
   object-fit: contain;
 }
-
 .navbar {
   align-items: center;
   background-color: #F5F5F5;

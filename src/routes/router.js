@@ -1,7 +1,8 @@
 import { createRouter, createWebHistory } from 'vue-router';
-import Authorization from '@/components/Authorization.vue'
+import Authorization from '@/components/Authorization.vue';
 import Register from '@/components/Register.vue';
-import RegisterOrganization from '@/components/Register-organization.vue'
+import RegisterOrganization from '@/components/Register-organization.vue';
+import RegisterEvent from '@/components/Register-event.vue'
 
 const routes = [
   // {
@@ -24,6 +25,12 @@ const routes = [
     name: 'register-organization',
     component: RegisterOrganization
   },
+  {
+    path: '/register/event',
+    name: 'register-event',
+    component: RegisterEvent
+  }
+
   // {
   //   path: '/volunteer-profile',
   //   name: 'volunteer-profile',
