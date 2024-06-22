@@ -22,7 +22,7 @@
     </div>
     <div class="row no-gutters w-100 h-100">
 
-      <div class="col-md-2 d-flex flex-row align-items-center">
+      <div class="col-md-3 d-flex flex-row align-items-center">
         <div class="image-container">
           <img src="/event-reg-picture2.png" alt="event-reg-picture2">
         </div>
@@ -89,7 +89,7 @@
         </div>
       </div>
 
-      <div class="col-md-2 d-flex flex-row-reverse align-items-center">
+      <div class="col-md-3 d-flex flex-row-reverse align-items-center">
         <div class="image-container">
           <img src="/event-reg-picture1.png" alt="event-reg-picture1">
         </div>
@@ -151,7 +151,7 @@ export default {
 
 <style scoped>
 .event-reg-container {
-  width: 100%;
+  width: 100vw;
   display: flex;
   min-height: 100vh;
   align-items: center;
