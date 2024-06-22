@@ -151,7 +151,8 @@ export default {
 
 <style scoped>
 .event-reg-container {
-  width: 100vw;
+  width: 100%;
+  height: 100%;
   display: flex;
   min-height: 100vh;
   align-items: center;
@@ -159,20 +160,19 @@ export default {
   position: absolute;
   top: 0;
   left: 0;
+  bottom: 0;
   background-color: #F5F5F5;
 }
 
 .event-reg-event-registration {
   gap: 48px;
   width: 100%;
-  height: 100%;
   display: flex;
-  padding: 112px 64px;
+  margin-top: 44px;
   overflow: hidden;
   align-items: center;
   flex-shrink: 0;
   flex-direction: column;
-  margin-top: 64px;
 }
 
 .event-reg-section-title {
