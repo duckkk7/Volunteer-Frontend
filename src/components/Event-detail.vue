@@ -27,13 +27,11 @@
     <div class="row gx-5 w-100 h-100">
       <div class="col-md-7 d-flex justify-content-end">
         <div class="form">
-
           <div class="section-title">
             <div class="content">
               <div class="heading">Название</div>
             </div>
           </div>
-
           <div class="inputs">
             <div class="text-wrapper">Основная информация</div>
             <div class="input">
@@ -42,7 +40,6 @@
               <div class="div">Дата и время: </div>
             </div>
           </div>
-
           <div class="inputs-2">
             <div class="text-wrapper">Описание</div>
             <div class="div-wrapper">
@@ -58,26 +55,22 @@
         </div>
       </div>
     </div>
-  </div>
-  <div class="footer">
-    <div class="container">
-      <div class="newsletter">
-        <div class="content">
-          <div class="join-our-newsletter">Подпишитесь на наши обновления</div>
-          <p class="">Чтобы оставаться в курсе последних событий</p>
-        </div>
-        <div class="actions">
-          <div class="type-default">
-            <input
-              class="form-control"
-              type="email"
-              placeholder="Введите email..."
-            >
+    <div class="footer">
+      <div class="container">
+        <div class="newsletter">
+          <div class="content">
+            <div class="join-our-newsletter">Подпишитесь на наши обновления</div>
+            <p class="">Чтобы оставаться в курсе последних событий</p>
+          </div>
+          <div class="actions">
+            <div class="type-default">
+              <div class="placeholder">Введите email</div>
+            </div>
           </div>
         </div>
-      </div>
-      <div class="by-sub-wr">
-        <p class="by-sub">Нажимая кнопку подписаться вы даете согласие на обработку ваших персональных данных</p>
+        <div class="by-sub-wr">
+          <p class="by-sub">Нажимая кнопку подписаться вы даете согласие на обработку ваших персональных данных</p>
+        </div>
       </div>
     </div>
   </div>
@@ -87,7 +80,7 @@
 .event-detail-page {
   align-items: center;
   background-color: #EBEBEB;
-  display: flex;
+  display: grid;
   gap: 34px;
   padding: 150px 64px;
   position: absolute;
@@ -396,14 +389,15 @@
   background-image: url("/footer-background.svg");
   background-position: 50% 50%;
   background-size: cover;
-  padding: 80px 64px;
+  padding: 80px 0;
   width: 100%;
   align-items: center;
   display: flex;
   flex-direction: column;
   gap: 80px;
-  position: sticky;
-
+  position: absolute;
+  left: 0;
+  bottom: 0;
 }
 
 .footer .container {
