@@ -20,7 +20,6 @@ export default {
       try {
         const response = await axios.post(ApiAddress + 'api/register-organization', {
           name: this.model.name,
-          lastName: this.model.lastName,
           email: this.model.email,
           password: this.model.password,
           phoneNumber: this.model.phoneNumber,
@@ -222,7 +221,7 @@ export default {
   padding: 12px 24px;
   position: relative;
   width: 100%;
-  color: #f5f5f5;
+  color: #F5F5F5;
   font-family: sans-serif;
   font-size: 18px;
   font-weight: 400;

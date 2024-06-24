@@ -163,6 +163,10 @@ export default {
   height: 100%;
 }
 
+.registration-for-volunteers .form-container {
+  padding-top: 54px;
+}
+
 .registration-for-volunteers .reg-title {
   align-items: center;
   display: flex;
