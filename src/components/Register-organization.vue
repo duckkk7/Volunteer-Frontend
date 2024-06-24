@@ -20,7 +20,6 @@ export default {
       try {
         const response = await axios.post(ApiAddress + 'api/register-organization', {
           name: this.model.name,
-          lastName: this.model.lastName,
           email: this.model.email,
           password: this.model.password,
           phoneNumber: this.model.phoneNumber,

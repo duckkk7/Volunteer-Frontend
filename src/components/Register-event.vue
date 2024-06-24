@@ -35,8 +35,7 @@
             <p class="text">Расскажите о Вашей идее всему миру!</p>
           </div>
 
-          <form class="event-reg-form">
-
+          <form @submit.prevent="createEvent" class="event-reg-form">
             <div class="event-reg-input">
               <div class="text-wrapper">Название</div>
               <input
@@ -84,8 +83,8 @@
             </div>
 
             <button class="publish-button">Опубликовать</button>
-
           </form>
+
         </div>
       </div>
 
@@ -117,27 +116,26 @@ export default {
     }
   },
   methods: {
-    async createAccount() {
+    async createEvent() {
       try {
-        const response = await axios.post(ApiAddress + 'api/register-organization', {
-          name: this.model.name,
-          lastName: this.model.lastName,
-          email: this.model.email,
-          password: this.model.password,
-          phoneNumber: this.model.phoneNumber,
-          legalAddress: this.model.legalAddress
+        const response = await axios.post(ApiAddress + 'api/register-event', {
+          title: this.model.title,
+          startDate: this.model.startDate,
+          ebdDate: this.model.endDate,
+          city: this.model.city,
+          description: this.model.description
         })
 
         // Успешный ответ
         localStorage.removeItem('accessToken')
-        this.$toast.add({severity: 'success', summary: 'Успех', detail: 'Вы успешно зарегистрировались', life: 3000})
+        this.$toast.add({severity: 'success', summary: 'Успех', detail: 'Ваше событие успешно зарегистрировано!', life: 3000})
         console.log(response.data)
       } catch (error) {
         // Ошибка запроса
         if (error.response) {
           // Сервер вернул ответ с ошибкой
           console.error('Response error:', error.response.data)
-          this.$toast.add({severity: 'error', summary: 'Ошибка', detail: error.response.data.message || 'Не удалось создать аккаунт', life: 3000})
+          this.$toast.add({severity: 'error', summary: 'Ошибка', detail: error.response.data.message || 'Не удалось зарегистрировать событие', life: 3000})
         } else {
           // Ошибка сети или другая ошибка
           console.error('Network error:', error.message)
@@ -293,6 +291,7 @@ export default {
   height: 700px;
   object-fit: contain;
 }
+
 .navbar {
   align-items: center;
   background-color: #F5F5F5;
