@@ -4,13 +4,16 @@ import Register from '@/components/Register.vue';
 import RegisterOrganization from '@/components/Register-organization.vue';
 import RegisterEvent from '@/components/Register-event.vue';
 import EventDetail from '@/components/Event-detail.vue';
+import VolunteerProfile from '@/components/VolunteerProfile.vue'
+import Home from '@/components/Home.vue'
+
 
 const routes = [
-  // {
-  //   path: '/',
-  //   name: 'home',
-  //   component: Home
-  // },
+  {
+    path: '/',
+    name: 'home',
+    component: Home
+  },
   {
     path: '/login',
     name: 'login',
@@ -27,6 +30,10 @@ const routes = [
     component: RegisterOrganization
   },
   {
+    path: '/volunteer-profile',
+    name: 'volunteer-profile',
+    component: VolunteerProfile
+  }
     path: '/register/event',
     name: 'register-event',
     component: RegisterEvent
@@ -36,12 +43,6 @@ const routes = [
     name: 'event-detail',
     component: EventDetail
   }
-
-  // {
-  //   path: '/volunteer-profile',
-  //   name: 'volunteer-profile',
-  //   component: VolunteerProfile
-  // }
 ]
 
 const router = createRouter({
@@ -49,4 +50,4 @@ const router = createRouter({
   routes
 })
 
-export default router;
+export default router
