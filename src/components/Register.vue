@@ -1,12 +1,11 @@
 <script>
-import axios from "axios";
-import { ApiAddress } from "@/common.ts";
+import axios from 'axios'
+import { ApiAddress } from '@/common.ts'
 //import { useToast } from 'primevue/usetoast';
 
-
 export default {
-  name: "new-account",
-  setup () {
+  name: 'new-account',
+  setup() {
     return {
     }
   },
@@ -14,22 +13,23 @@ export default {
   data() {
     return {
       model: {
-        firstName: "",
-        lastName: "",
-        middleName: "",
-        email: "",
-        password: "",
-        phoneNumber: "",
-        birthDate: ""
+        firstName: '',
+        lastName: '',
+        middleName: '',
+        email: '',
+        password: '',
+        phoneNumber: '',
+        birthDate: ''
       }
     }
   },
+
 
   methods: {
 
     async createAccount() {
       try {
-        let birthDateUTC = new Date(this.model.birthDate).toISOString();
+        let birthDateUTC = new Date(this.model.birthDate).toISOString()
         const response = await axios.post(ApiAddress + 'api/register-volunteer', {
           firstName: this.model.firstName,
           lastName: this.model.lastName,
@@ -37,52 +37,46 @@ export default {
           password: this.model.password,
           phoneNumber: this.model.phoneNumber,
           birthDate: birthDateUTC
-        });
+        })
 
         // Успешный ответ
-        localStorage.removeItem("accessToken");
-        this.$toast.add({severity: 'success', summary: 'Успех', detail: 'Вы успешно зарегистрировались', life: 3000});
-        console.log(response.data);
+        localStorage.removeItem('accessToken')
+        this.$toast.add({
+          severity: 'success',
+          summary: 'Успех',
+          detail: 'Вы успешно зарегистрировались',
+          life: 3000
+        })
+        console.log(response.data)
       } catch (error) {
         // Ошибка запроса
         if (error.response) {
           // Сервер вернул ответ с ошибкой
-          console.error("Response error:", error.response.data);
-          this.$toast.add({severity: 'error', summary: 'Ошибка', detail: error.response.data.message || 'Не удалось создать аккаунт', life: 3000});
+          console.error('Response error:', error.response.data)
+          this.$toast.add({
+            severity: 'error',
+            summary: 'Ошибка',
+            detail: error.response.data.message || 'Не удалось создать аккаунт',
+            life: 3000
+          })
         } else {
           // Ошибка сети или другая ошибка
-          console.error("Network error:", error.message);
-          this.$toast.add({severity: 'error', summary: 'Ошибка', detail: 'Ошибка сети, попробуйте еще раз', life: 3000});
+          console.error('Network error:', error.message)
+          this.$toast.add({
+            severity: 'error',
+            summary: 'Ошибка',
+            detail: 'Ошибка сети, попробуйте еще раз',
+            life: 3000
+          })
         }
       }
     }
   }
-};
+}
 </script>
-
 
 <template>
   <div class="registration-for-volunteers">
-    <div class="navbar">
-      <div class="content">
-        <div class="navigation">
-          <div class="button">О нас</div>
-          <div class="button">Волонтерам</div>
-          <div class="button">Мероприятия</div>
-          <div class="more">
-            <div class="button">Еще
-              <img class="chevron-down" alt="Chevron down" src="/chevrondown1046-9o3i.svg" />
-            </div>
-          </div>
-        </div>
-        <div class="actions">
-          <div class="log-in">
-            <button class="button" @click="$router.push('/login')">Войти</button>
-          </div>
-          <button class="sign-up" type="button" @click="$router.push('/register/organization')">Регистрация организации</button>
-        </div>
-      </div>
-    </div>
     <div class="row no-gutters w-100 h-100">
       <div class="col-md-6 d-flex justify-content-center align-items-center">
         <div class="form-container">
@@ -96,35 +90,19 @@ export default {
             <div class="inputs">
               <div class="div">
                 <div class="text-wrapper">Фамилия</div>
-                <input
-                  class="form-control"
-                  type="text"
-                  v-model.trim="model.lastName"
-                >
+                <input class="form-control" type="text" v-model.trim="model.lastName" />
               </div>
               <div class="div">
                 <div class="text-wrapper">Имя</div>
-                <input
-                  class="form-control"
-                  type="text"
-                  v-model="model.firstName"
-                >
+                <input class="form-control" type="text" v-model="model.firstName" />
               </div>
               <div class="div">
                 <div class="text-wrapper">Дата рождения</div>
-                <input
-                  class="form-control"
-                  type="date"
-                  v-model="model.birthDate"
-                >
+                <input class="form-control" type="date" v-model="model.birthDate" />
               </div>
               <div class="div">
                 <div class="text-wrapper">Номер телефона</div>
-                <input
-                  class="form-control"
-                  type="tel"
-                  v-model="model.phoneNumber"
-                >
+                <input class="form-control" type="tel" v-model="model.phoneNumber" />
               </div>
             </div>
             <div class="div">
@@ -134,15 +112,11 @@ export default {
                 type="email"
                 placeholder="name@example.com"
                 v-model="model.email"
-              >
+              />
             </div>
             <div class="div">
               <div class="text-wrapper">Пароль</div>
-              <input
-                class="form-control"
-                type="password"
-                v-model="model.password"
-              >
+              <input class="form-control" type="password" v-model="model.password" />
             </div>
             <button class="end-reg-button-v" type="submit">Зарегистрироваться</button>
           </form>
@@ -150,22 +124,22 @@ export default {
       </div>
       <div class="col-md-6 d-flex justify-content-center align-items-center">
         <div class="image-container">
-          <img alt="vol-reg-picture" src="/vol-reg-picture.png"/>
+          <img alt="vol-reg-picture" src="/vol-reg-picture.png" />
         </div>
       </div>
     </div>
   </div>
 </template>
 
-
 <style>
 .registration-for-volunteers {
   align-items: flex-start;
-  background-color: #F5F5F5;
+  background-color: #f5f5f5;
   display: flex;
   flex-direction: column;
   gap: 30px;
   padding: 10px 24px;
+  margin-top: 80px;
   position: absolute;
   top: 0;
   left: 0;
@@ -213,7 +187,7 @@ export default {
 
 .registration-for-volunteers .text {
   align-self: stretch;
-  color: #5C5C5C;
+  color: #5c5c5c;
   font-family: sans-serif;
   font-size: 18px;
   font-style: normal;
@@ -271,7 +245,7 @@ export default {
 .registration-for-volunteers .end-reg-button-v {
   align-items: center;
   align-self: stretch;
-  background-color: #FF4081;
+  background-color: #ff4081;
   border-radius: 10px;
   box-shadow: 0 4px 4px #00000040;
   display: flex;
@@ -282,7 +256,7 @@ export default {
   padding: 12px 24px;
   position: relative;
   width: 100%;
-  color: #F5F5F5;
+  color: #f5f5f5;
   font-family: sans-serif;
   font-size: 16px;
   font-weight: 400;
@@ -293,16 +267,15 @@ export default {
   border: 0;
 }
 
-.image-container img
-{
+.image-container img {
   width: 100%;
   height: 700px;
   object-fit: contain;
 }
-
+/* 
 .navbar {
   align-items: center;
-  background-color: #F5F5F5;
+  background-color: #f5f5f5;
   display: flex;
   flex-direction: column;
   position: absolute;
@@ -314,7 +287,7 @@ export default {
 .navbar .content {
   align-items: center;
   align-self: stretch;
-  background-color: #F5F5F5;
+  background-color: #f5f5f5;
   box-shadow: 0 4px 4px #00000040;
   display: flex;
   height: 72px;
@@ -373,7 +346,7 @@ export default {
 
 .navbar .log-in {
   align-items: center;
-  background-color: #F5F5F5;
+  background-color: #f5f5f5;
   border-radius: 10px;
   display: inline-flex;
   flex: 0 0 auto;
@@ -399,14 +372,14 @@ export default {
 }
 
 .navbar .sign-up:hover {
-  background-color: #FF4081;
-  color: #F5F5F5;
+  background-color: #ff4081;
+  color: #f5f5f5;
 }
 
 .navbar .sign-up {
   align-items: center;
   border: 1px solid;
-  border-color: #FF4081;
+  border-color: #ff4081;
   border-radius: 10px;
   box-shadow: 0 4px 4px #00000040;
   display: inline-flex;
@@ -421,6 +394,5 @@ export default {
   position: relative;
   font-size: 18px;
   font-family: sans-serif;
-}
-
+} */
 </style>
