@@ -1,14 +1,12 @@
 <script>
 import axios from 'axios'
 import { ApiAddress } from '@/common.ts'
-import { useVuelidate } from '@vuelidate/core'
-import { required, email, minLength } from '@vuelidate/validators'
+//import { useToast } from 'primevue/usetoast';
 
 export default {
   name: 'new-account',
   setup() {
     return {
-      v$: useVuelidate()
     }
   },
 
@@ -26,17 +24,9 @@ export default {
     }
   },
 
-  validations() {
-    return {
-      firstName: { required },
-      lastName: { required },
-      email: { required, email },
-      password: { required, minLength: minLength(7) },
-      birthDate: { required }
-    }
-  },
 
   methods: {
+
     async createAccount() {
       try {
         let birthDateUTC = new Date(this.model.birthDate).toISOString()
@@ -80,10 +70,6 @@ export default {
           })
         }
       }
-    },
-
-    checkForm() {
-      console.log('something about you')
     }
   }
 }
@@ -132,9 +118,7 @@ export default {
               <div class="text-wrapper">Пароль</div>
               <input class="form-control" type="password" v-model="model.password" />
             </div>
-            <button @click="checkForm" class="end-reg-button-v" type="submit">
-              Зарегистрироваться
-            </button>
+            <button class="end-reg-button-v" type="submit">Зарегистрироваться</button>
           </form>
         </div>
       </div>
