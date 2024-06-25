@@ -1,1 +1,1 @@
-export const ApiAddress = "http://127.0.0.1:5287";
+export const ApiAddress = 'http://localhost:5287/'

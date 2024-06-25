@@ -15,14 +15,9 @@ export default {
   methods: {
     async authorizeAccount() {
       try {
-        let birthDateUTC = new Date(this.model.birthDate).toISOString()
-        const response = await axios.post(ApiAddress + 'api/register-volunteer', {
-          firstName: this.model.firstName,
-          lastName: this.model.lastName,
+        const response = await axios.post(ApiAddress + 'api/login', {
           email: this.model.email,
-          password: this.model.password,
-          phoneNumber: this.model.phoneNumber,
-          birthDate: birthDateUTC
+          password: this.model.password
         })
 
         // Успешный ответ
