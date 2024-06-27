@@ -16,29 +16,6 @@
               <p class="text">Дата рождения: {{ model.phoneNumber }}</p>
             </div>
           </div>
-
-          <!-- <h1 class="heading">Профиль волонтера</h1>
-          <div class="profile-details">
-            <div class="detail">
-              <label class="label">Фамилия:</label>
-              <span class="value">{{ model.lastName }}</span>
-            </div>
-            <div class="detail">
-              <label class="label">Имя:</label>
-              <span class="value">{{ model.firstName }}</span>
-            </div>
-            <div class="detail">
-              <label class="label">Электронная почта:</label>
-              <span class="value">{{ model.email }}</span>
-            </div>
-            <div class="detail">
-              <label class="label">Номер телефона:</label>
-              <span class="value">{{ model.phoneNumber }}</span>
-            </div>
-            <div class="detail">
-              <label class="label">Дата рождения:</label>
-              <span class="value">{{ model.birthDate }}</span>
-            </div> -->
         </div>
       </div>
       <div class="col-md-6 d-flex justify-content-center align-items-center">

@@ -1,5 +1,5 @@
 <template>
-  <body>
+  <div class="body">
     <main>
       <div class="screenWithBack">
         <div class="firstScreen">
@@ -120,7 +120,7 @@
         <a class="event__btn" href="#">Посмотреть все</a>
       </div>
     </main>
-    <!-- <footer>
+    <footer>
       <div class="foot__con">
         <div class="foot__left">
           <div class="foot__text__1">
@@ -137,13 +137,15 @@
           </div>
         </div>
       </div>
-    </footer> -->
-  </body>
+    </footer>
+  </div>
 </template>
 
 <style scoped>
-body {
-  margin: 0; /* Отступы снаружи контейнера */
+.body {
+  width: 60vw;
+  margin: 0;
+  margin-top: 100px;
   font-family: sans-serif;
   background-color: #f0f8ff;
 }
@@ -155,14 +157,14 @@ body {
   box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.2);
 } */
 
-.head__con {
+/* .head__con {
   width: 80%;
-  display: flex; /* Выравнивание по экрану. Здесь в строку. */
-  justify-content: space-between; /* Распределить элементы по ширине */
-  align-items: center; /* Выровнять элементы по горизонтали */
-  margin: 1% auto; /* первое числот отвечает за верх и низ, второе за лево и право. auto - чтобы было выравнивание по середине */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 1% auto;
   padding-bottom: 1%;
-}
+} */
 
 header a {
   text-decoration: none; /* Убираем подчеркивание ссылки */
