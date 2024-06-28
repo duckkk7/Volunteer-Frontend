@@ -3,13 +3,10 @@ import axios from 'axios'
 import { ApiAddress } from '@/common.ts'
 
 export default {
-  name: 'authorization',
+  name: 'events',
   data() {
     return {
-      model: {
-        email: '',
-        password: ''
-      }
+      model: {}
     }
   },
   methods: {

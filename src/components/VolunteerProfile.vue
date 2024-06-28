@@ -1,32 +1,3 @@
-<template>
-  <div class="profile-for-volunteers">
-    <div class="row no-gutters w-100 h-100">
-      <div class="col-md-6 d-flex justify-content-center align-items-center">
-        <div class="form-container">
-          <div class="reg-title">
-            <div class="reg-tittle-content">
-              <div class="heading">Фамилия Имя{{ model.lastName }} {{ model.firstName }}</div>
-              <p class="text">
-                Привествую всех! Я - классный клевый перспективный волонтер из г. Саратов!
-                Функционал: швец, жнец, на дуде игрец! Очень хочу попробовать себя в чем-то новом!
-              </p>
-              <br />
-              <p class="text">Дата рождения: {{ model.birthDate }}</p>
-              <p class="text">Электронная почта: {{ model.email }}</p>
-              <p class="text">Дата рождения: {{ model.phoneNumber }}</p>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-6 d-flex justify-content-center align-items-center">
-        <div class="image-container">
-          <img alt="placeholder" src="/placeholder.png" />
-        </div>
-      </div>
-    </div>
-  </div>
-</template>
-
 <script>
 import axios from 'axios'
 import { ApiAddress } from '@/common.ts'
@@ -70,6 +41,36 @@ export default {
   }
 }
 </script>
+
+<template>
+  <div class="profile-for-volunteers">
+    <div class="row no-gutters w-100 h-100">
+      <div class="col-md-6 d-flex justify-content-center align-items-center">
+        <div class="form-container">
+          <div class="reg-title">
+            <div class="reg-tittle-content">
+              <div class="heading">Фамилия Имя{{ model.lastName }} {{ model.firstName }}</div>
+              <p class="text">
+                Привествую всех! Я - классный клевый перспективный волонтер из г. Саратов!
+                Функционал: швец, жнец, на дуде игрец! Очень хочу попробовать себя в чем-то новом!
+              </p>
+              <br />
+              <p class="text">Дата рождения: {{ model.birthDate }}</p>
+              <p class="text">Электронная почта: {{ model.email }}</p>
+              <p class="text">Дата рождения: {{ model.phoneNumber }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6 d-flex justify-content-center align-items-center">
+        <div class="image-container">
+          <img alt="placeholder" src="/placeholder.png" />
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
 <!-- <template>
   <div class="profile-for-volunteers">
     <div class="row no-gutters w-100 h-100">

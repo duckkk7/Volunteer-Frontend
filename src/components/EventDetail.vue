@@ -1,49 +1,152 @@
-<script setup>
+<script>
+import axios from 'axios'
+import { ApiAddress } from '@/common.ts'
 
+export default {
+  name: 'event-detail',
+  data() {
+    return {
+      model: {
+        id: '',
+        organizationId: '',
+        title: '',
+        photoPath: null,
+        startDate: '',
+        endDate: '',
+        city: '',
+        description: '',
+        organization: null,
+        applications: null
+      }
+    }
+  },
+  async created() {
+    await this.fetchEventData()
+  },
+  watch: {
+    '$route.params.id': 'fetchEventData'
+  },
+  methods: {
+    async fetchEventData() {
+      try {
+        const response = await axios.get(`${ApiAddress}api/GetById/${this.$route.params.id}`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('accessToken')}`
+          }
+        })
+
+        this.model.id = response.data.id
+        this.model.organizationId = response.data.organizationId
+        this.model.title = response.data.title
+        this.model.photoPath = response.data.photoPath
+        this.model.startDate = response.data.startDate
+        this.model.endDate = response.data.endDate
+        this.model.city = response.data.city
+        this.model.description = response.data.description
+        this.model.organization = response.data.organization
+        this.model.applications = response.data.applications
+
+        console.log(response.data)
+        console.log('this works')
+      } catch (error) {
+        if (error.response) {
+          console.error('Response error:', error.response.data)
+          this.$toast.add({
+            severity: 'error',
+            summary: 'Ошибка',
+            detail: error.response.data.message || 'Не удалось создать аккаунт',
+            life: 3000
+          })
+        } else {
+          console.error('Network error:', error.message)
+          this.$toast.add({
+            severity: 'error',
+            summary: 'Ошибка',
+            detail: 'Ошибка сети, попробуйте еще раз',
+            life: 3000
+          })
+        }
+      }
+    }
+  }
+}
+//   async created() {
+//     try {
+//       const response = await axios.get(ApiAddress + 'api/GetById/1', {
+//         headers: {
+//           Authorization: `Bearer ${localStorage.getItem('accessToken')}`
+//         }
+//       })
+
+//       this.model.id = response.data.id
+//       this.model.organizationId = response.data.organizationId
+//       this.model.title = response.data.title
+//       this.model.photoPath = response.data.photoPath
+//       this.model.startDate = response.data.startDate
+//       this.model.endDate = response.data.endDate
+//       this.model.city = response.data.city
+//       this.model.description = response.data.description
+//       this.model.organization = response.data.organization
+//       this.model.applications = response.data.applications
+
+//       // Успешный ответ
+//       // localStorage.removeItem('accessToken')
+//       // this.$toast.add({
+//       //   severity: 'success',
+//       //   summary: 'Успех',
+//       //   detail: 'Вы успешно зарегистрировались',
+//       //   life: 3000
+//       // })
+//       console.log(response.data)
+//       console.log('this works')
+//     } catch (error) {
+//       // Ошибка запроса
+//       if (error.response) {
+//         // Сервер вернул ответ с ошибкой
+//         console.error('Response error:', error.response.data)
+//         this.$toast.add({
+//           severity: 'error',
+//           summary: 'Ошибка',
+//           detail: error.response.data.message || 'Не удалось создать аккаунт',
+//           life: 3000
+//         })
+//       } else {
+//         // Ошибка сети или другая ошибка
+//         console.error('Network error:', error.message)
+//         this.$toast.add({
+//           severity: 'error',
+//           summary: 'Ошибка',
+//           detail: 'Ошибка сети, попробуйте еще раз',
+//           life: 3000
+//         })
+//       }
+//     }
+//   }
+// }
 </script>
 
 <template>
   <div class="event-detail-page px-4">
-    <div class="navbar">
-      <div class="content">
-        <div class="navigation">
-          <div class="button">О нас</div>
-          <div class="button">Волонтерам</div>
-          <div class="button">Мероприятия</div>
-          <div class="more">
-            <div class="button">Еще
-              <img class="chevron-down" alt="Chevron down" src="/chevrondown1046-9o3i.svg" />
-            </div>
-          </div>
-        </div>
-        <div class="actions">
-          <div class="log-in">
-            <button class="button" @click="$router.push('/login')">Войти</button>
-          </div>
-          <button class="sign-up" type="button" @click="$router.push('/register')">Регистрация волонтера</button>
-        </div>
-      </div>
-    </div>
     <div class="row gx-5 w-100 h-100">
       <div class="col-md-7 d-flex justify-content-end">
         <div class="form">
           <div class="section-title">
             <div class="content">
-              <div class="heading">Название</div>
+              <div class="heading">{{ model.title }}</div>
             </div>
           </div>
           <div class="inputs">
             <div class="text-wrapper">Основная информация</div>
             <div class="input">
-              <div class="div">Организатор:</div>
-              <div class="div">Город: </div>
-              <div class="div">Дата и время: </div>
+              <div class="div">Организатор: {{ model.organization }}</div>
+              <div class="div">Город: {{ model.city }}</div>
+              <div class="div">Дата и время: с {{ model.startDate }} по {{ model.endDate }}</div>
             </div>
           </div>
           <div class="inputs-2">
             <div class="text-wrapper">Описание</div>
             <div class="div-wrapper">
-              <div class="div">Текст</div>
+              <div class="div">{{ model.description }}</div>
             </div>
           </div>
         </div>
@@ -55,31 +158,13 @@
         </div>
       </div>
     </div>
-    <div class="footer">
-      <div class="container">
-        <div class="newsletter">
-          <div class="content">
-            <div class="join-our-newsletter">Подпишитесь на наши обновления</div>
-            <p class="">Чтобы оставаться в курсе последних событий</p>
-          </div>
-          <div class="actions">
-            <div class="type-default">
-              <div class="placeholder">Введите email</div>
-            </div>
-          </div>
-        </div>
-        <div class="by-sub-wr">
-          <p class="by-sub">Нажимая кнопку подписаться вы даете согласие на обработку ваших персональных данных</p>
-        </div>
-      </div>
-    </div>
   </div>
 </template>
 
 <style scoped>
 .event-detail-page {
   align-items: center;
-  background-color: #EBEBEB;
+  background-color: #ebebeb;
   display: grid;
   gap: 34px;
   padding: 150px 64px;
@@ -88,7 +173,6 @@
   left: 0;
   width: 100%;
   height: 100%;
-
 }
 
 .event-detail-page .form {
@@ -165,7 +249,7 @@
 .event-detail-page .input {
   align-items: flex-start;
   align-self: stretch;
-  background-color: #F5F5F5;
+  background-color: #f5f5f5;
   border-radius: 20px;
   display: flex;
   flex: 0 0 auto;
@@ -200,7 +284,7 @@
 .event-detail-page .div-wrapper {
   align-items: flex-start;
   align-self: stretch;
-  background-color: #F5F5F5;
+  background-color: #f5f5f5;
   border-radius: 20px;
   display: flex;
   flex: 1;
@@ -213,7 +297,7 @@
 
 .event-detail-page .card {
   align-items: center;
-  background-color: #F5F5F5;
+  background-color: #f5f5f5;
   border-radius: 20px;
   display: flex;
   flex-direction: column;
@@ -239,7 +323,7 @@
 .event-detail-page .rose-button {
   align-items: center;
   align-self: stretch;
-  background-color: #FF4081;
+  background-color: #ff4081;
   border-radius: 10px;
   border: 0;
   box-shadow: 0 4px 4px #00000040;
@@ -251,7 +335,7 @@
   padding: 12px 24px;
   position: relative;
   width: 100%;
-  color: #F5F5F5;
+  color: #f5f5f5;
   font-family: sans-serif;
   font-size: 18px;
   font-weight: 400;
@@ -262,7 +346,7 @@
 
 .navbar {
   align-items: center;
-  background-color: #F5F5F5;
+  background-color: #f5f5f5;
   display: flex;
   flex-direction: column;
   position: absolute;
@@ -274,7 +358,7 @@
 .navbar .content {
   align-items: center;
   align-self: stretch;
-  background-color: #F5F5F5;
+  background-color: #f5f5f5;
   box-shadow: 0 4px 4px #00000040;
   display: flex;
   height: 72px;
@@ -334,7 +418,7 @@
 
 .navbar .log-in {
   align-items: center;
-  background-color: #F5F5F5;
+  background-color: #f5f5f5;
   border-radius: 10px;
   display: inline-flex;
   flex: 0 0 auto;
@@ -360,14 +444,14 @@
 }
 
 .navbar .sign-up:hover {
-  background-color: #FF4081;
-  color: #F5F5F5;
+  background-color: #ff4081;
+  color: #f5f5f5;
 }
 
 .navbar .sign-up {
   align-items: center;
   border: 1px solid;
-  border-color: #FF4081;
+  border-color: #ff4081;
   border-radius: 10px;
   box-shadow: 0 4px 4px #00000040;
   display: inline-flex;
@@ -386,7 +470,7 @@
 
 .footer {
   background-color: #ffffff33;
-  background-image: url("/footer-background.svg");
+  background-image: url('/footer-background.svg');
   background-position: 50% 50%;
   background-size: cover;
   padding: 80px 0;
@@ -440,9 +524,9 @@
 
 .footer .type-default {
   align-items: center;
-  background-color: #F5F5F5;
+  background-color: #f5f5f5;
   border: 1px solid;
-  border-color: #FF4081;
+  border-color: #ff4081;
   display: flex;
   gap: 8px;
   justify-content: flex-end;
@@ -452,7 +536,7 @@
 }
 
 .footer .placeholder {
-  color: #5C5C5C;
+  color: #5c5c5c;
   flex: 1;
   font-family: sans-serif;
   font-size: 16px;
@@ -495,5 +579,4 @@
   white-space: nowrap;
   width: fit-content;
 }
-
 </style>
