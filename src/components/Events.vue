@@ -6,47 +6,35 @@ export default {
   name: 'events',
   data() {
     return {
-      model: {}
+      events: []
     }
   },
+  created() {
+    this.fetchEvents()
+  },
   methods: {
-    async authorizeAccount() {
+    async fetchEvents() {
       try {
-        const response = await axios.post(ApiAddress + 'api/login', {
-          email: this.model.email,
-          password: this.model.password
-        })
-
-        // Успешный ответ
-        localStorage.removeItem('accessToken')
-        this.$toast.add({
-          severity: 'success',
-          summary: 'Успех',
-          detail: 'Вы успешно зарегистрировались',
-          life: 3000
-        })
-        console.log(response.data)
+        const response = await axios.get(`${ApiAddress}api/GetAllEvents`)
+        this.events = response.data.$values.map((event) => ({
+          id: event.$id,
+          title: event.title,
+          image: event.photoPath || '/public/vol-reg-picture.png', // Default image if photoPath is null
+          startDate: new Date(event.startDate).toLocaleDateString(),
+          startTime: new Date(event.startDate).toLocaleTimeString([], {
+            hour: '2-digit',
+            minute: '2-digit'
+          }),
+          endDate: new Date(event.endDate).toLocaleDateString(),
+          endTime: new Date(event.endDate).toLocaleTimeString([], {
+            hour: '2-digit',
+            minute: '2-digit'
+          }),
+          city: event.city,
+          organizationId: event.organizationId
+        }))
       } catch (error) {
-        // Ошибка запроса
-        if (error.response) {
-          // Сервер вернул ответ с ошибкой
-          console.error('Response error:', error.response.data)
-          this.$toast.add({
-            severity: 'error',
-            summary: 'Ошибка',
-            detail: error.response.data.message || 'Не удалось создать аккаунт',
-            life: 3000
-          })
-        } else {
-          // Ошибка сети или другая ошибка
-          console.error('Network error:', error.message)
-          this.$toast.add({
-            severity: 'error',
-            summary: 'Ошибка',
-            detail: 'Ошибка сети, попробуйте еще раз',
-            life: 3000
-          })
-        }
+        console.error('Error fetching events:', error)
       }
     }
   }
@@ -54,309 +42,206 @@ export default {
 </script>
 
 <template>
-  <div class="authorization">
-    <div class="row no-gutters w-100 h-100">
-      <div class="col-md-6 d-flex justify-content-center align-items-center">
-        <div class="form-container">
-          <div class="auth-title">
-            <div class="auth-title-content">
-              <div class="heading">Вход</div>
-              <p class="text">
-                Ещё нет аккаунта?
-                <a class="link-opacity-50" href="#" @click="$router.push('/register')"
-                  >Зарегистрироваться</a
-                >
-              </p>
-            </div>
-          </div>
-          <form @submit.prevent="authorizeAccount" class="auth-form-v">
-            <div class="inputs">
-              <div class="div">
-                <div class="text-wrapper">Электронная почта</div>
-                <input
-                  class="form-control"
-                  type="email"
-                  placeholder="name@example.com"
-                  v-model="model.email"
-                />
-              </div>
-              <div class="div">
-                <div class="text-wrapper">Пароль</div>
-                <input class="form-control" type="password" v-model="model.password" />
+  <div class="body">
+    <main>
+      <div class="secondScreen">
+        <div class="slogan__2 sc__title">Стань волонтером — найди свое призвание</div>
+        <div class="event__con">
+          <a v-for="event in events" :key="event.id" :href="`/event/${event.id}`">
+            <div class="event__block">
+              <!-- TODO: <img :src="event.image" alt="Event image" /> -->
+              <img src="/public/vol-reg-picture.png" alt="img" />
+              <div class="event__info">
+                <div class="info__title">
+                  {{ event.title }}
+                </div>
+                <div class="info__org">
+                  {{ event.organization }}
+                </div>
+                <div class="event__date">
+                  <div class="info__date">{{ event.startDate }} - {{ event.endDate }}</div>
+                  <div class="info__time">{{ event.startTime }} - {{ event.endTime }}</div>
+                </div>
               </div>
             </div>
-            <button class="end-auth-button-v" type="submit">Войти</button>
-          </form>
+          </a>
         </div>
       </div>
-      <div class="col-md-6 d-flex justify-content-center align-items-center">
-        <div class="image-container">
-          <img alt="vol-reg-picture" src="/authorization-picture.png" />
-        </div>
-      </div>
-    </div>
+    </main>
   </div>
 </template>
 
-<style>
-.authorization {
-  align-items: flex-start;
-  background-color: #f5f5f5;
-  display: flex;
-  flex-direction: column;
-  gap: 30px;
-  padding: 10px 24px;
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+<style scoped>
+.body {
+  width: 60vw;
+  margin: 0;
+  margin-top: 100px;
+  font-family: sans-serif;
+  background-color: #f0f8ff;
 }
 
-.authorization .auth-title {
-  align-items: center;
-  display: flex;
-  flex: 0 0 auto;
-  flex-direction: column;
-  gap: 16px;
-  position: relative;
-  width: 650px;
-}
+/* -&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;style for header&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45; */
 
-.authorization .auth-title-content {
-  align-items: flex-start;
-  align-self: stretch;
-  display: flex;
-  flex: 0 0 auto;
-  flex-direction: column;
-  gap: 15px;
-  position: relative;
-  margin-bottom: 15px;
-}
+/* header {
+    width: 100%;
+    box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.2);
+  } */
 
-.authorization .heading {
-  align-self: stretch;
+/* .head__con {
+    width: 80%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 1% auto;
+    padding-bottom: 1%;
+  } */
+
+header a {
+  text-decoration: none; /* Убираем подчеркивание ссылки */
   color: #333333;
-  font-family: sans-serif;
-  font-size: 48px;
-  font-style: normal;
-  font-weight: bold;
-  letter-spacing: normal;
-  line-height: normal;
-  margin-top: 0;
-  position: relative;
-  text-align: center;
 }
 
-.authorization .text {
-  align-self: stretch;
-  color: #5c5c5c;
-  font-family: sans-serif;
-  font-size: 18px;
-  font-style: normal;
-  font-weight: normal;
-  letter-spacing: normal;
-  line-height: normal;
-  position: relative;
-  text-align: center;
+.menu__item {
+  margin-right: 50px;
 }
 
-.authorization .auth-form-v {
-  align-items: center;
-  display: inline-flex;
-  flex: 0 0 auto;
-  flex-direction: column;
-  gap: 24px;
-  position: relative;
-}
-
-.authorization .inputs {
-  align-items: center;
+.btn__con {
   display: flex;
-  flex: 0 0 auto;
-  flex-direction: column;
-  gap: 24px;
-  justify-content: center;
-  position: relative;
-  width: 650px;
-}
-
-.authorization .div {
-  align-items: flex-start;
-  align-self: stretch;
-  display: flex;
-  flex: 0 0 auto;
-  flex-direction: column;
-  gap: 10px;
-  position: relative;
-  width: 100%;
-}
-
-.authorization .text-wrapper {
-  align-self: stretch;
-  color: #333333;
-  font-family: sans-serif;
-  font-size: 18px;
-  font-style: normal;
-  font-weight: normal;
-  letter-spacing: normal;
-  line-height: normal;
-  margin-top: -1px;
-  position: relative;
-}
-
-.authorization .end-auth-button-v {
   align-items: center;
-  align-self: stretch;
-  background-color: #ff4081;
+}
+
+.head__logIn {
+  border: 1px solid #ff4081;
   border-radius: 10px;
-  box-shadow: 0 4px 4px #00000040;
-  display: flex;
-  flex: 0 0 auto;
-  gap: 8px;
-  justify-content: center;
-  overflow: hidden;
-  padding: 12px 24px;
-  position: relative;
-  width: 100%;
-  color: #f5f5f5;
-  font-family: sans-serif;
-  font-size: 18px;
-  font-weight: 400;
-  letter-spacing: 0;
-  line-height: 24px;
-  white-space: nowrap;
-  outline: none;
-  border: 0;
-  margin-top: 20px;
+  padding: 5% 10%; /* Отступы изнутри */
+  margin-left: 50px;
+  box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.2);
 }
 
-.image-container img {
-  width: 100%;
-  height: 700px;
-  object-fit: contain;
+.head__logIn:hover,
+.event__btn:hover {
+  background-color: #ff4081;
+  color: white;
 }
 
-.navbar {
-  align-items: center;
-  background-color: #f5f5f5;
-  display: flex;
-  flex-direction: column;
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
+.head__signIn:hover,
+.menu__item:hover {
+  color: #ff4081;
 }
 
-.navbar .content {
-  align-items: center;
-  align-self: stretch;
-  background-color: #f5f5f5;
-  box-shadow: 0 4px 4px #00000040;
+/* -&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;style for main&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45; */
+
+.screenWithBack {
+  width: 100%;
+  background-image: url('/header-background.jpg');
+  background-size: cover;
+}
+
+.firstScreen {
+  display: grid; /* Выравнивание по экрану. Здесь в столбик. */
+  padding: 5% 10%;
+  margin: -15px 0 2% 0;
+}
+
+.slogan__1 {
+  font-size: 60px;
+  font-weight: 700;
+  width: 70%;
+}
+
+.slogan__2 {
+  font-size: 32px;
+  color: #333333;
+  margin: 2% 0 3% 0;
+}
+
+.btn__vol,
+.btn__org {
+  border-radius: 10px;
+  padding: 1% 2%; /* Отступы изнутри */
+  box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.2);
+  border: 1px solid #00829b;
+  text-decoration: none;
+  margin-right: 25px;
+}
+
+.btn__vol,
+.btn__org:hover {
+  background-color: #00829b;
+  color: white;
+}
+
+.btn__org,
+.btn__vol:hover {
+  background-color: white;
+  color: #00829b;
+}
+
+.sc__title {
+  text-align: center;
+}
+
+.secondScreen {
+  width: 80%;
+  margin: 0 auto;
+  display: grid;
+  justify-items: center;
+}
+
+.secondScreen a {
+  text-decoration: none;
+  color: black;
+  width: 30%;
+}
+
+.event__con {
   display: flex;
-  height: 72px;
   justify-content: space-between;
-  padding: 0 64px;
-  position: relative;
+  flex-wrap: wrap; /* Чтобы те блоки, которые не влезают в строку, опускались вниз */
+  margin: 2% 0 3% 0;
+}
+
+.event__block {
   width: 100%;
+  display: grid;
+  padding: 3%;
+  border-radius: 15px;
+  background-color: white;
+  margin-bottom: 10%;
+  box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.2);
 }
 
-.navbar .navigation {
-  align-items: flex-start;
-  display: inline-flex;
-  flex: 0 0 auto;
-  gap: 32px;
-  position: relative;
+.event__block img {
+  width: 100%;
+  border-radius: 20px;
 }
 
-.navbar .text-wrapper {
-  color: #333333;
-  font-family: sans-serif;
-  font-size: 18px;
-  font-style: normal;
-  font-weight: normal;
-  letter-spacing: normal;
-  line-height: normal;
-  margin-top: 0;
-  position: relative;
-  white-space: nowrap;
-  width: fit-content;
+.info__title {
+  font-size: 24px;
+  line-height: 30px; /* Межстрочный интервал */
+  font-weight: 600;
+  margin: 5% 0;
 }
 
-.navbar .more {
-  align-items: center;
-  display: inline-flex;
-  flex: 0 0 auto;
-  gap: 4px;
-  justify-content: center;
-  position: relative;
+.event__date {
+  display: flex;
+  font-size: 12px;
+  margin-top: 5%;
 }
 
-.navbar .chevron-down {
-  height: 24px;
-  position: relative;
-  width: 24px;
+.info__time {
+  margin-left: 50px;
 }
 
-.navbar .actions {
-  align-items: center;
-  display: inline-flex;
-  flex: 0 0 auto;
-  gap: 16px;
-  justify-content: flex-end;
-  padding: 0 5px;
-  position: relative;
-}
-
-.navbar .log-in {
-  align-items: center;
-  background-color: #f5f5f5;
+.event__btn {
+  width: 10%;
+  border: 1px solid #ff4081;
   border-radius: 10px;
-  display: inline-flex;
-  flex: 0 0 auto;
-  gap: 20px;
-  justify-content: center;
-  padding: 8px 20px;
-  position: relative;
+  padding: 1%; /* Отступы изнутри */
+  box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.2);
+  text-align: center;
+  margin-bottom: 5%;
 }
 
-.navbar .button {
-  all: unset;
-  box-sizing: border-box;
-  color: #333333;
-  font-family: sans-serif;
-  font-size: 18px;
-  font-weight: 400;
-  letter-spacing: 0;
-  line-height: 27px;
-  position: relative;
-  white-space: nowrap;
-  width: fit-content;
-  cursor: pointer;
-}
-
-.navbar .sign-up:hover {
-  background-color: #ff4081;
-  color: #f5f5f5;
-}
-
-.navbar .sign-up {
-  align-items: center;
-  border: 1px solid;
-  border-color: #ff4081;
-  border-radius: 10px;
-  box-shadow: 0 4px 4px #00000040;
-  display: inline-flex;
-  flex: 0 0 auto;
-  gap: 8px;
-  justify-content: center;
-  margin-bottom: 0;
-  margin-right: 0;
-  margin-top: 0;
-  overflow: hidden;
-  padding: 8px 20px;
-  position: relative;
-  font-size: 18px;
-  font-family: sans-serif;
-}
+/* &#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;style for footer-&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45; */
 </style>

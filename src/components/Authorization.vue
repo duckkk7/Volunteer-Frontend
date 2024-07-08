@@ -21,7 +21,9 @@ export default {
         })
 
         // Успешный ответ
-        localStorage.removeItem('accessToken')
+        const token = response.data.message.match(/Token: (.*)/)[1]
+        console.log(token)
+        localStorage.setItem('authToken', token)
         this.$toast.add({
           severity: 'success',
           summary: 'Успех',

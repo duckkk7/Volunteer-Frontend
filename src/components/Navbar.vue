@@ -2,9 +2,9 @@
   <nav class="navbar fixed-top">
     <div class="content">
       <div class="navigation">
-        <div class="button">О нас</div>
+        <div class="button" @click="$router.push('/#')">О нас</div>
         <div class="button">Волонтерам</div>
-        <div class="button">Мероприятия</div>
+        <div class="button" @click="$router.push('/events')">Мероприятия</div>
         <div class="more">
           <div class="button">
             Еще

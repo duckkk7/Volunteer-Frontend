@@ -98,16 +98,20 @@ export default {
   methods: {
     async createEvent() {
       try {
+        const token = localStorage.getItem('authToken')
         const response = await axios.post(ApiAddress + 'api/CreateEvent', {
           title: this.model.title,
           startDate: this.model.startDate,
           ebdDate: this.model.endDate,
           city: this.model.city,
-          description: this.model.description
+          description: this.model.description,
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
         })
 
         // Успешный ответ
-        localStorage.removeItem('accessToken')
+
         this.$toast.add({
           severity: 'success',
           summary: 'Успех',

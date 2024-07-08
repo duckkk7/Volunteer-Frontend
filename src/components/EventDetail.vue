@@ -31,6 +31,7 @@ export default {
       try {
         const response = await axios.get(`${ApiAddress}api/GetById/${this.$route.params.id}`, {
           headers: {
+            // TODO: Figure out why not work
             Authorization: `Bearer ${localStorage.getItem('accessToken')}`
           }
         })
@@ -39,8 +40,16 @@ export default {
         this.model.organizationId = response.data.organizationId
         this.model.title = response.data.title
         this.model.photoPath = response.data.photoPath
-        this.model.startDate = response.data.startDate
-        this.model.endDate = response.data.endDate
+        this.model.startDate = new Date(response.data.startDate).toLocaleDateString()
+        this.model.endDate = new Date(response.data.endDate).toLocaleDateString()
+        this.model.startTime = new Date(response.data.startDate).toLocaleTimeString([], {
+          hour: '2-digit',
+          minute: '2-digit'
+        })
+        this.model.endTime = new Date(response.data.endDate).toLocaleTimeString([], {
+          hour: '2-digit',
+          minute: '2-digit'
+        })
         this.model.city = response.data.city
         this.model.description = response.data.description
         this.model.organization = response.data.organization
@@ -70,59 +79,6 @@ export default {
     }
   }
 }
-//   async created() {
-//     try {
-//       const response = await axios.get(ApiAddress + 'api/GetById/1', {
-//         headers: {
-//           Authorization: `Bearer ${localStorage.getItem('accessToken')}`
-//         }
-//       })
-
-//       this.model.id = response.data.id
-//       this.model.organizationId = response.data.organizationId
-//       this.model.title = response.data.title
-//       this.model.photoPath = response.data.photoPath
-//       this.model.startDate = response.data.startDate
-//       this.model.endDate = response.data.endDate
-//       this.model.city = response.data.city
-//       this.model.description = response.data.description
-//       this.model.organization = response.data.organization
-//       this.model.applications = response.data.applications
-
-//       // Успешный ответ
-//       // localStorage.removeItem('accessToken')
-//       // this.$toast.add({
-//       //   severity: 'success',
-//       //   summary: 'Успех',
-//       //   detail: 'Вы успешно зарегистрировались',
-//       //   life: 3000
-//       // })
-//       console.log(response.data)
-//       console.log('this works')
-//     } catch (error) {
-//       // Ошибка запроса
-//       if (error.response) {
-//         // Сервер вернул ответ с ошибкой
-//         console.error('Response error:', error.response.data)
-//         this.$toast.add({
-//           severity: 'error',
-//           summary: 'Ошибка',
-//           detail: error.response.data.message || 'Не удалось создать аккаунт',
-//           life: 3000
-//         })
-//       } else {
-//         // Ошибка сети или другая ошибка
-//         console.error('Network error:', error.message)
-//         this.$toast.add({
-//           severity: 'error',
-//           summary: 'Ошибка',
-//           detail: 'Ошибка сети, попробуйте еще раз',
-//           life: 3000
-//         })
-//       }
-//     }
-//   }
-// }
 </script>
 
 <template>
@@ -138,9 +94,12 @@ export default {
           <div class="inputs">
             <div class="text-wrapper">Основная информация</div>
             <div class="input">
-              <div class="div">Организатор: {{ model.organization }}</div>
+              <div class="div">Организатор: {{ model.organization.name }}</div>
               <div class="div">Город: {{ model.city }}</div>
-              <div class="div">Дата и время: с {{ model.startDate }} по {{ model.endDate }}</div>
+              <div class="div">
+                Дата и время: с {{ model.startDate }} {{ model.startTime }} по {{ model.endDate }}
+                {{ model.endTime }}
+              </div>
             </div>
           </div>
           <div class="inputs-2">

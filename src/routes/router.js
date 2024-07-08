@@ -6,6 +6,7 @@ import RegisterEvent from '@/components/RegisterEvent.vue'
 import EventDetail from '@/components/EventDetail.vue'
 import VolunteerProfile from '@/components/VolunteerProfile.vue'
 import Home from '@/components/Home.vue'
+import Events from '@/components/Events.vue'
 
 const routes = [
   {
@@ -42,6 +43,11 @@ const routes = [
     path: '/event/:id',
     name: 'event-detail',
     component: EventDetail
+  },
+  {
+    path: '/events',
+    name: 'events',
+    component: Events
   }
 ]
 

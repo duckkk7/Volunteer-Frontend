@@ -6,13 +6,13 @@
           <div class="slogan__1">Добро пожаловать в единое волонтерское движение!</div>
           <div class="slogan__2">Творить добро и делать мир лучше!</div>
           <div class="btn__con">
-            <a class="btn__vol" href="#">Волонтер</a>
-            <a class="btn__org" href="#">Организация</a>
+            <a class="btn__vol" @click="$router.push('/register')">Волонтер</a>
+            <a class="btn__org" @click="$router.push('/register/organization')">Организация</a>
           </div>
         </div>
       </div>
       <div class="secondScreen">
-        <div class="slogan__2 sc__title">Стань волонтером — найди свое призвание</div>
+        <div class="slogan__2 sc__title">Стань волонтером — найди свое призвание</div>
         <div class="event__con">
           <a href="#">
             <div class="event__block">
