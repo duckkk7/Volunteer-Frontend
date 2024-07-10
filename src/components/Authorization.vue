@@ -1,6 +1,7 @@
 <script>
 import axios from 'axios'
 import { ApiAddress } from '@/common.ts'
+import Cookies from 'js-cookie'
 
 export default {
   name: 'authorization',
@@ -23,7 +24,8 @@ export default {
         // Успешный ответ
         const token = response.data.message.match(/Token: (.*)/)[1]
         console.log(token)
-        localStorage.setItem('authToken', token)
+        Cookies.set('authToken', token, { expires: 1 })
+        // localStorage.setItem('authToken', token)
         this.$toast.add({
           severity: 'success',
           summary: 'Успех',

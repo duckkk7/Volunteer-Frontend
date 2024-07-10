@@ -17,7 +17,7 @@ export default {
       try {
         const response = await axios.get(`${ApiAddress}api/GetAllEvents`)
         this.events = response.data.$values.map((event) => ({
-          id: event.$id,
+          id: event.id,
           title: event.title,
           image: event.photoPath || '/public/vol-reg-picture.png', // Default image if photoPath is null
           startDate: new Date(event.startDate).toLocaleDateString(),

@@ -81,6 +81,7 @@
 <script>
 import axios from 'axios'
 import { ApiAddress } from '@/common.ts'
+import Cookies from 'js-cookie'
 
 export default {
   name: 'new-event',
@@ -98,17 +99,27 @@ export default {
   methods: {
     async createEvent() {
       try {
-        const token = localStorage.getItem('authToken')
-        const response = await axios.post(ApiAddress + 'api/CreateEvent', {
-          title: this.model.title,
-          startDate: this.model.startDate,
-          ebdDate: this.model.endDate,
-          city: this.model.city,
-          description: this.model.description,
-          headers: {
-            Authorization: `Bearer ${token}`
+        const token = Cookies.get('authToken')
+
+        // Convert date values to UTC
+        const startDateUTC = new Date(this.model.startDate).toISOString()
+        const endDateUTC = new Date(this.model.endDate).toISOString()
+
+        const response = await axios.post(
+          ApiAddress + 'api/CreateEvent',
+          {
+            title: this.model.title,
+            startDate: startDateUTC,
+            endDate: endDateUTC,
+            city: this.model.city,
+            description: this.model.description
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`
+            }
           }
-        })
+        )
 
         // Успешный ответ
 
