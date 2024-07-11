@@ -1,3 +1,9 @@
+<script setup>
+import Events from './Events.vue'
+</script>
+
+<!-- TODO: Растянуть по всему экрану, чтобы было по центру инфа, подчистить по возможности стили -->
+
 <template>
   <div class="body">
     <main>
@@ -11,113 +17,9 @@
           </div>
         </div>
       </div>
+      <Events />
       <div class="secondScreen">
-        <div class="slogan__2 sc__title">Стань волонтером — найди свое призвание</div>
-        <div class="event__con">
-          <a href="#">
-            <div class="event__block">
-              <img src="/public/vol-reg-picture.png" alt="img" />
-              <div class="event__info">
-                <div class="info__title">
-                  Общегородская мемориально-патронатная акция (июнь 2024)
-                </div>
-                <div class="info__org">
-                  Комитет общественных связей и молодежной политики г. Москвы
-                </div>
-                <div class="event__date">
-                  <div class="info__date">19 июня 2024</div>
-                  <div class="info__time">С 10:00 до 13:00</div>
-                </div>
-              </div>
-            </div>
-          </a>
-          <a href="#">
-            <div class="event__block">
-              <img src="/public/vol-reg-picture.png" alt="img" />
-              <div class="event__info">
-                <div class="info__title">
-                  Общегородская мемориально-патронатная акция (июнь 2024)
-                </div>
-                <div class="info__org">
-                  Комитет общественных связей и молодежной политики г. Москвы
-                </div>
-                <div class="event__date">
-                  <div class="info__date">19 июня 2024</div>
-                  <div class="info__time">С 10:00 до 13:00</div>
-                </div>
-              </div>
-            </div>
-          </a>
-          <a href="#">
-            <div class="event__block">
-              <img src="/public/vol-reg-picture.png" alt="img" />
-              <div class="event__info">
-                <div class="info__title">
-                  Общегородская мемориально-патронатная акция (июнь 2024)
-                </div>
-                <div class="info__org">
-                  Комитет общественных связей и молодежной политики г. Москвы
-                </div>
-                <div class="event__date">
-                  <div class="info__date">19 июня 2024</div>
-                  <div class="info__time">С 10:00 до 13:00</div>
-                </div>
-              </div>
-            </div>
-          </a>
-          <a href="#">
-            <div class="event__block">
-              <img src="/public/vol-reg-picture.png" alt="img" />
-              <div class="event__info">
-                <div class="info__title">
-                  Общегородская мемориально-патронатная акция (июнь 2024)
-                </div>
-                <div class="info__org">
-                  Комитет общественных связей и молодежной политики г. Москвы
-                </div>
-                <div class="event__date">
-                  <div class="info__date">19 июня 2024</div>
-                  <div class="info__time">С 10:00 до 13:00</div>
-                </div>
-              </div>
-            </div>
-          </a>
-          <a href="#">
-            <div class="event__block">
-              <img src="/public/vol-reg-picture.png" alt="img" />
-              <div class="event__info">
-                <div class="info__title">
-                  Общегородская мемориально-патронатная акция (июнь 2024)
-                </div>
-                <div class="info__org">
-                  Комитет общественных связей и молодежной политики г. Москвы
-                </div>
-                <div class="event__date">
-                  <div class="info__date">19 июня 2024</div>
-                  <div class="info__time">С 10:00 до 13:00</div>
-                </div>
-              </div>
-            </div>
-          </a>
-          <a href="#">
-            <div class="event__block">
-              <img src="/public/vol-reg-picture.png" alt="img" />
-              <div class="event__info">
-                <div class="info__title">
-                  Общегородская мемориально-патронатная акция (июнь 2024)
-                </div>
-                <div class="info__org">
-                  Комитет общественных связей и молодежной политики г. Москвы
-                </div>
-                <div class="event__date">
-                  <div class="info__date">19 июня 2024</div>
-                  <div class="info__time">С 10:00 до 13:00</div>
-                </div>
-              </div>
-            </div>
-          </a>
-        </div>
-        <a class="event__btn" href="#">Посмотреть все</a>
+        <a class="event__btn" @click="$router.push('/events')">Посмотреть все</a>
       </div>
     </main>
   </div>
@@ -125,28 +27,12 @@
 
 <style scoped>
 .body {
-  width: 60vw;
+  width: 80vw;
   margin: 0;
   margin-top: 100px;
   font-family: sans-serif;
   background-color: #f0f8ff;
 }
-
-/* -&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;style for header&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45; */
-
-/* header {
-  width: 100%;
-  box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.2);
-} */
-
-/* .head__con {
-  width: 80%;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin: 1% auto;
-  padding-bottom: 1%;
-} */
 
 header a {
   text-decoration: none; /* Убираем подчеркивание ссылки */
@@ -184,13 +70,19 @@ header a {
 /* -&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;style for main&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45; */
 
 .screenWithBack {
-  width: 100%;
+  width: 100vw;
   background-image: url('/header-background.jpg');
   background-size: cover;
+  background-position: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .firstScreen {
-  display: grid; /* Выравнивание по экрану. Здесь в столбик. */
+  display: flex;
+  flex-direction: column;
+  /* align-items: center; */
   padding: 5% 10%;
   margin: -15px 0 2% 0;
 }
@@ -234,16 +126,20 @@ header a {
 }
 
 .secondScreen {
-  width: 80%;
+  width: 100%;
   margin: 0 auto;
-  display: grid;
-  justify-items: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* justify-items: center; */
+  flex-direction: column;
 }
 
 .secondScreen a {
   text-decoration: none;
   color: black;
-  width: 30%;
+  width: auto;
+  max-width: 100%;
 }
 
 .event__con {

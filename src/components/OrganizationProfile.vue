@@ -3,45 +3,40 @@ import axios from 'axios'
 import { ApiAddress } from '@/common.ts'
 import Cookies from 'js-cookie'
 
-// TODO: добавить количество часов рабочих
-
 export default {
-  name: 'profile',
+  name: 'org-profile',
   data() {
     return {
       model: {
-        firstName: '',
-        lastName: '',
+        id: null,
+        commonUserId: '',
+        name: '',
         photoPath: null,
-        birthDate: '',
-        about: null,
-        participationCount: null,
-        email: '',
-        phoneNumber: ''
-        // applications: null,
-        // subscriptions: null
+        legalAddress: '',
+        website: '',
+        workingHours: '',
+        commonUser: null
       }
     }
   },
   async created() {
     try {
       const token = Cookies.get('authToken')
-      //   TODO: Измени на volunteer-profile когда на бэке исправят
-      const response = await axios.get(ApiAddress + 'api/voluteer-profile', {
+      const response = await axios.get(ApiAddress + 'api/organization-profile', {
         headers: {
           Authorization: `Bearer ${token}`
         }
       })
 
       // Populate the model with the response data
-      this.model.firstName = response.data.firstName
-      this.model.lastName = response.data.lastName
-      this.model.email = response.data.email
-      this.model.phoneNumber = response.data.phoneNumber
-      this.model.birthDate = new Date(response.data.birthDate).toLocaleDateString()
-      this.model.participationCount = response.data.participationCount
-      //   this.model.applications = response.data.applications
-      //   this.model.subscriptions = response.data.subscriptions
+      this.model.id = response.data.id
+      this.model.commonUserId = response.data.commonUserId
+      this.model.name = response.data.name
+      this.model.photoPath = response.data.photoPath
+      this.model.legalAddress = response.data.legalAddress
+      this.model.website = response.data.website
+      this.model.workingHours = response.data.workingHours
+      this.model.commonUser = response.data.commonUser
     } catch (error) {
       console.error('Error fetching profile:', error)
       this.$toast.add({
@@ -62,22 +57,20 @@ export default {
         <div class="form-container">
           <div class="reg-title">
             <div class="reg-tittle-content">
-              <div class="heading">{{ model.lastName }} {{ model.firstName }}</div>
-              <p class="text">
-                Привествую всех! Я - классный клевый перспективный волонтер из г. Саратов!
-                Функционал: швец, жнец, на дуде игрец! Очень хочу попробовать себя в чем-то новом!
-              </p>
+              <div class="heading">{{ model.name }}</div>
+              <!-- <p class="text">                
+              </p> -->
               <br />
-              <p class="text">Дата рождения: {{ model.birthDate }}</p>
-              <p class="text">Электронная почта: {{ model.email }}</p>
-              <!-- <p class="text">Дата рождения: {{ model.phoneNumber }}</p> -->
-              <p class="text">Количество часов: {{ model.participationCount }}</p>
+              <p class="text">Адрес организации: {{ model.legalAddress }}</p>
+              <p class="text">Сайт организации: {{ model.website }}</p>
+              <p class="text">Количество рабочих часов: {{ model.workingHours }}</p>
             </div>
           </div>
         </div>
       </div>
       <div class="col-md-6 d-flex justify-content-center align-items-center">
         <div class="image-container">
+          <!-- TODO: photoPath -->
           <img alt="placeholder" src="/placeholder.png" />
         </div>
       </div>

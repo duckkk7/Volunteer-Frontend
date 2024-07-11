@@ -21,38 +21,19 @@ export default {
           password: this.model.password
         })
 
-        // Успешный ответ
+        // Successful response
         const token = response.data.message.match(/Token: (.*)/)[1]
         console.log(token)
         Cookies.set('authToken', token, { expires: 1 })
-        // localStorage.setItem('authToken', token)
-        this.$toast.add({
-          severity: 'success',
-          summary: 'Успех',
-          detail: 'Вы успешно зарегистрировались',
-          life: 3000
-        })
-        console.log(response.data)
+        this.$router.push('/')
       } catch (error) {
-        // Ошибка запроса
+        // Request error
         if (error.response) {
-          // Сервер вернул ответ с ошибкой
-          console.error('Response error:', error.response.data)
-          this.$toast.add({
-            severity: 'error',
-            summary: 'Ошибка',
-            detail: error.response.data.message || 'Не удалось создать аккаунт',
-            life: 3000
-          })
+          // Server returned an error response
+          this.errorMessage = error.response.data.message || 'Failed to authorize'
         } else {
-          // Ошибка сети или другая ошибка
-          console.error('Network error:', error.message)
-          this.$toast.add({
-            severity: 'error',
-            summary: 'Ошибка',
-            detail: 'Ошибка сети, попробуйте еще раз',
-            life: 3000
-          })
+          // Network error or other error
+          this.errorMessage = 'Network error, please try again'
         }
       }
     }

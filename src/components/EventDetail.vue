@@ -1,6 +1,9 @@
 <script>
 import axios from 'axios'
 import { ApiAddress } from '@/common.ts'
+import Cookies from 'js-cookie'
+
+// TODO: Functionality of "Записаться"
 
 export default {
   name: 'event-detail',
@@ -9,14 +12,14 @@ export default {
       model: {
         id: '',
         organizationId: '',
+        organizationName: '',
         title: '',
         photoPath: null,
         startDate: '',
         endDate: '',
         city: '',
         description: '',
-        organization: null,
-        applications: null
+        coverLetter: ''
       }
     }
   },
@@ -29,17 +32,18 @@ export default {
   methods: {
     async fetchEventData() {
       try {
+        const token = Cookies.get('authToken')
         const response = await axios.get(`${ApiAddress}api/GetById/${this.$route.params.id}`, {
           headers: {
-            // TODO: Figure out why not work
-            Authorization: `Bearer ${localStorage.getItem('accessToken')}`
+            Authorization: `Bearer ${token}`
           }
         })
 
         this.model.id = response.data.id
         this.model.organizationId = response.data.organizationId
+        this.model.organizationName = response.data.organizationName
         this.model.title = response.data.title
-        this.model.photoPath = response.data.photoPath
+        this.model.photoPath = null
         this.model.startDate = new Date(response.data.startDate).toLocaleDateString()
         this.model.endDate = new Date(response.data.endDate).toLocaleDateString()
         this.model.startTime = new Date(response.data.startDate).toLocaleTimeString([], {
@@ -52,28 +56,40 @@ export default {
         })
         this.model.city = response.data.city
         this.model.description = response.data.description
-        this.model.organization = response.data.organization
-        this.model.applications = response.data.applications
 
         console.log(response.data)
         console.log('this works')
       } catch (error) {
         if (error.response) {
           console.error('Response error:', error.response.data)
-          this.$toast.add({
-            severity: 'error',
-            summary: 'Ошибка',
-            detail: error.response.data.message || 'Не удалось создать аккаунт',
-            life: 3000
-          })
+          this.showError('Не удалось загрузить данные. ' + error.response.data.message)
         } else {
           console.error('Network error:', error.message)
-          this.$toast.add({
-            severity: 'error',
-            summary: 'Ошибка',
-            detail: 'Ошибка сети, попробуйте еще раз',
-            life: 3000
-          })
+          this.showError('Ошибка сети. Попробуйте позже.')
+        }
+      }
+    },
+    async applyToEvent() {
+      try {
+        const token = Cookies.get('authToken')
+        const response = await axios.post(
+          `${ApiAddress}api/Application/Apply?event=${this.$route.params.id}`,
+          { coverLetter: this.coverLetter },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`
+            }
+          }
+        )
+        // browser alert message that application was sent
+        alert('Заявка отправлена')
+      } catch (error) {
+        if (error.response) {
+          console.error('Response error:', error.response.data)
+          this.showError('Не удалось загрузить данные. ' + error.response.data.message)
+        } else {
+          console.error('Network error:', error.message)
+          this.showError('Ошибка сети. Попробуйте позже.')
         }
       }
     }
@@ -94,7 +110,7 @@ export default {
           <div class="inputs">
             <div class="text-wrapper">Основная информация</div>
             <div class="input">
-              <div class="div">Организатор: {{ model.organization.name }}</div>
+              <div class="div">Организатор: {{ model.organizationName }}</div>
               <div class="div">Город: {{ model.city }}</div>
               <div class="div">
                 Дата и время: с {{ model.startDate }} {{ model.startTime }} по {{ model.endDate }}
@@ -113,7 +129,17 @@ export default {
       <div class="col-md-4 d-flex justify-content-start">
         <div class="card">
           <img src="/event-picture.jpg" alt="event-picture" class="placeholder-image" />
-          <button class="rose-button">Записаться</button>
+          <button class="rose-button" @click="applyToEvent">Записаться</button>
+          <div class="div-wrapper">
+            <!-- <input class="form-control" type="text" v-model="model.firstName" /> -->
+            <textarea
+              v-model="coverLetter"
+              class="form-control"
+              cols="30"
+              rows="3"
+              placeholder="Текст заявки"
+            />
+          </div>
         </div>
       </div>
     </div>
@@ -261,7 +287,7 @@ export default {
   display: flex;
   flex-direction: column;
   gap: 24px;
-  height: 500px;
+  height: 600px;
   justify-content: center;
   padding: 20px;
   position: relative;
@@ -301,241 +327,5 @@ export default {
   letter-spacing: 0;
   line-height: 24px;
   white-space: nowrap;
-}
-
-.navbar {
-  align-items: center;
-  background-color: #f5f5f5;
-  display: flex;
-  flex-direction: column;
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-}
-
-.navbar .content {
-  align-items: center;
-  align-self: stretch;
-  background-color: #f5f5f5;
-  box-shadow: 0 4px 4px #00000040;
-  display: flex;
-  height: 72px;
-  flex-direction: row;
-  justify-content: space-between;
-  padding: 0 64px;
-  position: relative;
-  width: 100%;
-}
-
-.navbar .navigation {
-  align-items: flex-start;
-  display: inline-flex;
-  flex: 0 0 auto;
-  gap: 32px;
-  position: relative;
-}
-
-.navbar .text-wrapper {
-  color: #333333;
-  font-family: sans-serif;
-  font-size: 18px;
-  font-style: normal;
-  font-weight: normal;
-  letter-spacing: normal;
-  line-height: normal;
-  margin-top: 0;
-  position: relative;
-  white-space: nowrap;
-  width: fit-content;
-}
-
-.navbar .more {
-  align-items: center;
-  display: inline-flex;
-  flex: 0 0 auto;
-  gap: 4px;
-  justify-content: center;
-  position: relative;
-}
-
-.navbar .chevron-down {
-  height: 24px;
-  position: relative;
-  width: 24px;
-}
-
-.navbar .actions {
-  align-items: center;
-  display: inline-flex;
-  flex: 0 0 auto;
-  gap: 16px;
-  justify-content: flex-end;
-  padding: 0 5px;
-  position: relative;
-}
-
-.navbar .log-in {
-  align-items: center;
-  background-color: #f5f5f5;
-  border-radius: 10px;
-  display: inline-flex;
-  flex: 0 0 auto;
-  gap: 20px;
-  justify-content: center;
-  padding: 8px 20px;
-  position: relative;
-}
-
-.navbar .button {
-  all: unset;
-  box-sizing: border-box;
-  color: #333333;
-  font-family: sans-serif;
-  font-size: 18px;
-  font-weight: 400;
-  letter-spacing: 0;
-  line-height: 27px;
-  position: relative;
-  white-space: nowrap;
-  width: fit-content;
-  cursor: pointer;
-}
-
-.navbar .sign-up:hover {
-  background-color: #ff4081;
-  color: #f5f5f5;
-}
-
-.navbar .sign-up {
-  align-items: center;
-  border: 1px solid;
-  border-color: #ff4081;
-  border-radius: 10px;
-  box-shadow: 0 4px 4px #00000040;
-  display: inline-flex;
-  flex: 0 0 auto;
-  gap: 8px;
-  justify-content: center;
-  margin-bottom: 0;
-  margin-right: 0;
-  margin-top: 0;
-  overflow: hidden;
-  padding: 8px 20px;
-  position: relative;
-  font-size: 18px;
-  font-family: sans-serif;
-}
-
-.footer {
-  background-color: #ffffff33;
-  background-image: url('/footer-background.svg');
-  background-position: 50% 50%;
-  background-size: cover;
-  padding: 80px 0;
-  width: 100%;
-  align-items: center;
-  display: flex;
-  flex-direction: column;
-  gap: 80px;
-  position: absolute;
-  left: 0;
-  bottom: 0;
-}
-
-.footer .container {
-  align-items: center;
-  align-self: stretch;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  justify-content: center;
-  position: relative;
-  width: 100%;
-}
-
-.footer .newsletter {
-  align-items: center;
-  align-self: stretch;
-  display: flex;
-  gap: 200px;
-  justify-content: center;
-  position: relative;
-  width: 100%;
-}
-
-.footer .content {
-  align-items: flex-start;
-  display: flex;
-  flex-direction: column;
-  position: relative;
-  width: 500px;
-}
-
-.footer .actions {
-  align-items: center;
-  display: flex;
-  flex: 1;
-  gap: 16px;
-  justify-content: flex-end;
-  position: relative;
-}
-
-.footer .type-default {
-  align-items: center;
-  background-color: #f5f5f5;
-  border: 1px solid;
-  border-color: #ff4081;
-  display: flex;
-  gap: 8px;
-  justify-content: flex-end;
-  padding: 12px;
-  position: relative;
-  width: 402px;
-}
-
-.footer .placeholder {
-  color: #5c5c5c;
-  flex: 1;
-  font-family: sans-serif;
-  font-size: 16px;
-  font-weight: 400;
-  letter-spacing: 0;
-  line-height: 24px;
-  position: relative;
-}
-
-.footer .button {
-  all: unset;
-  box-sizing: border-box;
-  color: #333333;
-  font-family: sans-serif;
-  font-size: 18px;
-  font-weight: 400;
-  letter-spacing: 0;
-  line-height: 27px;
-  position: relative;
-  white-space: nowrap;
-  width: fit-content;
-}
-
-.footer .by-sub-wr {
-  align-items: center;
-  align-self: stretch;
-  display: flex;
-  gap: 4px;
-  height: 51px;
-  justify-content: flex-end;
-  position: relative;
-  width: 100%;
-}
-.footer .by-sub {
-  color: #333333;
-  font-family: sans-serif;
-  font-size: 18px;
-  font-style: normal;
-  position: relative;
-  white-space: nowrap;
-  width: fit-content;
 }
 </style>

@@ -7,6 +7,7 @@ import EventDetail from '@/components/EventDetail.vue'
 import VolunteerProfile from '@/components/VolunteerProfile.vue'
 import Home from '@/components/Home.vue'
 import Events from '@/components/Events.vue'
+import OrganizationProfile from '@/components/OrganizationProfile.vue'
 
 const routes = [
   {
@@ -48,6 +49,12 @@ const routes = [
     path: '/events',
     name: 'events',
     component: Events
+  },
+  {
+    // path: '/organization/:id',
+    path: '/organization-profile',
+    name: 'organization-profile',
+    component: OrganizationProfile
   }
 ]
 
