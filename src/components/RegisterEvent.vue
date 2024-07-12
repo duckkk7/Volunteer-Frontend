@@ -166,6 +166,7 @@ export default {
   align-items: center;
   flex-direction: column;
   position: absolute;
+  margin-top: 60px;
   top: 0;
   left: 0;
   bottom: 0;

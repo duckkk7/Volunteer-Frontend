@@ -3,14 +3,10 @@
     <div class="content">
       <div class="navigation">
         <div class="button" @click="$router.push('/#')">О нас</div>
-        <div class="button">Волонтерам</div>
         <div class="button" @click="$router.push('/events')">Мероприятия</div>
-        <div class="more">
-          <div class="button">
-            Еще
-            <img class="chevron-down" alt="Chevron down" src="/chevrondown1046-9o3i.svg" />
-          </div>
-        </div>
+        <!-- TODO: Профиль волонтера или организации в зависимости от роли в JWT токене -->
+        <div class="button" @click="$router.push('/register/event')">Создать мероприятие</div>
+        <div class="button" @click="navigateToProfile">Профиль</div>
       </div>
       <div class="actions">
         <div class="log-in">
@@ -19,15 +15,18 @@
         <button class="sign-up" type="button" @click="navigateToRegister">
           {{ registerButtonText }}
         </button>
-        <!-- <button class="sign-up" type="button" @click="$router.push('/register/organization')">
-          Регистрация организации
-        </button> -->
       </div>
     </div>
   </nav>
 </template>
 
 <script>
+import { jwtDecode } from 'jwt-decode'
+import Cookies from 'js-cookie'
+
+// FIXME: Даже если текущий токен истек, при нажатии на Профиль тебя перекинет на страничку профиля (она правда пустая будет)
+// Это происходит, потому что JWT токен с предыдущих входов все еще хранится в куки и хранит инфу о роли
+
 export default {
   name: 'Navbar',
   data() {
@@ -56,6 +55,27 @@ export default {
         this.$router.push('/register/organization')
       } else {
         this.$router.push('/register')
+      }
+    },
+    navigateToProfile() {
+      const token = Cookies.get('authToken')
+      if (token) {
+        try {
+          const decodedToken = jwtDecode(token)
+          const role = decodedToken.role
+          if (role === 'Volunteer') {
+            this.$router.push('/volunteer-profile')
+          } else if (role === 'Organization') {
+            this.$router.push('/organization-profile')
+          } else {
+            console.error('Unknown role in JWT token')
+            alert('Не удалось загрузить профиль. Попробуйте позже.')
+          }
+        } catch (error) {
+          console.error('Error decoding JWT token:', error)
+        }
+      } else {
+        this.$router.push('/login')
       }
     }
   }

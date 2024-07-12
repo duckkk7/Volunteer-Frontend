@@ -6,8 +6,7 @@ import { ApiAddress } from '@/common.ts'
 export default {
   name: 'new-account',
   setup() {
-    return {
-    }
+    return {}
   },
 
   data() {
@@ -24,9 +23,7 @@ export default {
     }
   },
 
-
   methods: {
-
     async createAccount() {
       try {
         let birthDateUTC = new Date(this.model.birthDate).toISOString()
@@ -40,7 +37,6 @@ export default {
         })
 
         // Успешный ответ
-        localStorage.removeItem('accessToken')
         this.$toast.add({
           severity: 'success',
           summary: 'Успех',
@@ -272,127 +268,4 @@ export default {
   height: 700px;
   object-fit: contain;
 }
-/* 
-.navbar {
-  align-items: center;
-  background-color: #f5f5f5;
-  display: flex;
-  flex-direction: column;
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-}
-
-.navbar .content {
-  align-items: center;
-  align-self: stretch;
-  background-color: #f5f5f5;
-  box-shadow: 0 4px 4px #00000040;
-  display: flex;
-  height: 72px;
-  justify-content: space-between;
-  padding: 0 64px;
-  position: relative;
-  width: 100%;
-}
-
-.navbar .navigation {
-  align-items: flex-start;
-  display: inline-flex;
-  flex: 0 0 auto;
-  gap: 32px;
-  position: relative;
-}
-
-.navbar .text-wrapper {
-  color: #333333;
-  font-family: sans-serif;
-  font-size: 18px;
-  font-style: normal;
-  font-weight: normal;
-  letter-spacing: normal;
-  line-height: normal;
-  margin-top: 0;
-  position: relative;
-  white-space: nowrap;
-  width: fit-content;
-}
-
-.navbar .more {
-  align-items: center;
-  display: inline-flex;
-  flex: 0 0 auto;
-  gap: 4px;
-  justify-content: center;
-  position: relative;
-}
-
-.navbar .chevron-down {
-  height: 24px;
-  position: relative;
-  width: 24px;
-}
-
-.navbar .actions {
-  align-items: center;
-  display: inline-flex;
-  flex: 0 0 auto;
-  gap: 16px;
-  justify-content: flex-end;
-  padding: 0 5px;
-  position: relative;
-}
-
-.navbar .log-in {
-  align-items: center;
-  background-color: #f5f5f5;
-  border-radius: 10px;
-  display: inline-flex;
-  flex: 0 0 auto;
-  gap: 20px;
-  justify-content: center;
-  padding: 8px 20px;
-  position: relative;
-}
-
-.navbar .button {
-  all: unset;
-  box-sizing: border-box;
-  color: #333333;
-  font-family: sans-serif;
-  font-size: 18px;
-  font-weight: 400;
-  letter-spacing: 0;
-  line-height: 27px;
-  position: relative;
-  white-space: nowrap;
-  width: fit-content;
-  cursor: pointer;
-}
-
-.navbar .sign-up:hover {
-  background-color: #ff4081;
-  color: #f5f5f5;
-}
-
-.navbar .sign-up {
-  align-items: center;
-  border: 1px solid;
-  border-color: #ff4081;
-  border-radius: 10px;
-  box-shadow: 0 4px 4px #00000040;
-  display: inline-flex;
-  flex: 0 0 auto;
-  gap: 8px;
-  justify-content: center;
-  margin-bottom: 0;
-  margin-right: 0;
-  margin-top: 0;
-  overflow: hidden;
-  padding: 8px 20px;
-  position: relative;
-  font-size: 18px;
-  font-family: sans-serif;
-} */
 </style>

@@ -3,10 +3,8 @@ import axios from 'axios'
 import { ApiAddress } from '@/common.ts'
 import Cookies from 'js-cookie'
 
-// TODO: добавить количество часов рабочих
-
 export default {
-  name: 'profile',
+  name: 'profile-edit',
   data() {
     return {
       model: {
@@ -55,6 +53,34 @@ export default {
         life: 3000
       })
     }
+  },
+  methods: {
+    async updateProfile() {
+      try {
+        const token = Cookies.get('authToken')
+        //   TODO: Измени на volunteer-profile когда на бэке исправят
+        const response = await axios.put(
+          `${ApiAddress}api/update-volunteer?volunteerCommonUserId=${this.model.commonUserId}`,
+          {
+            firstName: this.model.firstName,
+            lastName: this.model.lastName,
+            photoPath: this.model.photoPath,
+            birthDate: new Date(this.model.birthDate).toISOString(),
+            about: this.model.about,
+            participationCount: this.model.participationCount
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`
+            }
+          }
+        )
+
+        this.$router.push('/volunteer-profile')
+      } catch (error) {
+        console.error('Error updating profile:', error)
+      }
+    }
   }
 }
 </script>
@@ -66,19 +92,35 @@ export default {
         <div class="form-container">
           <div class="reg-title">
             <div class="reg-tittle-content">
-              <div class="heading">{{ model.lastName }} {{ model.firstName }}</div>
-              <p class="text" v-show="model.about">
+              <div class="heading">Редактирование профиля</div>
+              <form @submit.prevent="updateProfile">
+                <div>
+                  <label for="firstName">First Name:</label>
+                  <input v-model="model.firstName" id="firstName" type="text" />
+                </div>
+                <div>
+                  <label for="lastName">Last Name:</label>
+                  <input v-model="model.lastName" id="lastName" type="text" />
+                </div>
+                <div>
+                  <label for="photoPath">Photo URL:</label>
+                  <input v-model="model.photoPath" id="photoPath" type="text" />
+                </div>
+                <div>
+                  <label for="about">About:</label>
+                  <textarea v-model="model.about" id="about"></textarea>
+                </div>
+                <button type="submit">Сохранить</button>
+              </form>
+              <!-- <p class="text" v-show="model.about">
                 {{ model.about }}
               </p>
               <br />
               <p class="text">Дата рождения: {{ model.birthDate }}</p>
-              <p class="text">Электронная почта: {{ model.email }}</p>
-              <!-- <p class="text">Номер телефона: {{ model.phoneNumber }}</p> -->
+              <p class="text">Электронная почта: {{ model.email }}</p>              
               <p class="text">Количество часов: {{ model.participationCount }}</p>
               <br />
-              <a class="event__btn" @click="$router.push('/volunteer-profile/edit')"
-                >Редактировать профиль</a
-              >
+              <a class="event__btn" @click="$router.push('/events')">Редактировать профиль</a> -->
             </div>
           </div>
         </div>

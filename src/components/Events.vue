@@ -73,8 +73,10 @@ export default {
 
 <style scoped>
 .body {
-  width: 60vw;
-  margin: 0;
+  width: 100vw;
+  /* margin: 0; */
+  margin-left: auto;
+  margin-right: auto;
   margin-top: 100px;
   font-family: sans-serif;
   background-color: #f0f8ff;
@@ -191,14 +193,15 @@ header a {
 .secondScreen a {
   text-decoration: none;
   color: black;
-  width: 30%;
+  max-width: 20%;
+  margin-right: 1%;
 }
 
 .event__con {
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap; /* Чтобы те блоки, которые не влезают в строку, опускались вниз */
-  margin: 2% 0 3% 0;
+  /* margin: 2% 0 3% 0; */
 }
 
 .event__block {
