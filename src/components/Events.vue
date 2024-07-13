@@ -16,7 +16,8 @@ export default {
     async fetchEvents() {
       try {
         const response = await axios.get(`${ApiAddress}api/GetAllEvents`)
-        this.events = response.data.$values.map((event) => ({
+        console.log(response.data)
+        this.events = response.data.map((event) => ({
           id: event.id,
           title: event.title,
           image: event.photoPath || '/public/vol-reg-picture.png', // Default image if photoPath is null
@@ -47,7 +48,8 @@ export default {
       <div class="secondScreen">
         <div class="slogan__2 sc__title">Стань волонтером — найди свое призвание</div>
         <div class="event__con">
-          <a v-for="event in events" :key="event.id" :href="`/event/${event.id}`">
+          <a v-for="event in events" :key="event.id" @click="$router.push(`/event/${event.id}`)">
+            <!-- <a v-for="event in events" :key="event.id"> -->
             <div class="event__block">
               <!-- TODO: <img :src="event.image" alt="Event image" /> -->
               <img src="/public/vol-reg-picture.png" alt="img" />

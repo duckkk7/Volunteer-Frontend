@@ -9,6 +9,7 @@ import Home from '@/components/Home.vue'
 import Events from '@/components/Events.vue'
 import OrganizationProfile from '@/components/OrganizationProfile.vue'
 import VolunteerProfileEdit from '@/components/VolunteerProfileEdit.vue'
+import OrganizationProfileEdit from '@/components/OrganizationProfileEdit.vue'
 
 const routes = [
   {
@@ -61,6 +62,11 @@ const routes = [
     path: '/volunteer-profile/edit',
     name: 'volunteer-profile-edit',
     component: VolunteerProfileEdit
+  },
+  {
+    path: '/organization-profile/edit',
+    name: 'organization-profile-edit',
+    component: OrganizationProfileEdit
   }
 ]
 

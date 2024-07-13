@@ -4,45 +4,39 @@ import { ApiAddress } from '@/common.ts'
 import Cookies from 'js-cookie'
 
 export default {
-  name: 'profile-edit',
+  name: 'org-profile-edit',
   data() {
     return {
       model: {
-        commonUserId: null,
-        firstName: '',
-        lastName: '',
+        id: null,
+        commonUserId: '',
+        name: '',
         photoPath: null,
-        birthDate: '',
-        about: null,
-        participationCount: null,
-        email: '',
-        phoneNumber: ''
-        // applications: null,
-        // subscriptions: null
+        legalAddress: '',
+        website: '',
+        workingHours: '',
+        commonUser: null
       }
     }
   },
   async created() {
     try {
       const token = Cookies.get('authToken')
-      const response = await axios.get(ApiAddress + 'api/volunteer-profile', {
+      const response = await axios.get(ApiAddress + 'api/organization-profile', {
         headers: {
           Authorization: `Bearer ${token}`
         }
       })
 
       // Populate the model with the response data
+      this.model.id = response.data.id
       this.model.commonUserId = response.data.commonUserId
-      this.model.firstName = response.data.firstName
-      this.model.lastName = response.data.lastName
-      this.model.email = response.data.email
+      this.model.name = response.data.name
       this.model.photoPath = response.data.photoPath
-      this.model.phoneNumber = response.data.phoneNumber
-      this.model.birthDate = new Date(response.data.birthDate)
-      this.model.about = response.data.about
-      this.model.participationCount = response.data.participationCount
-      //   this.model.applications = response.data.applications
-      //   this.model.subscriptions = response.data.subscriptions
+      this.model.legalAddress = response.data.legalAddress
+      this.model.website = response.data.website
+      this.model.workingHours = response.data.workingHours
+      this.model.commonUser = response.data.commonUser
     } catch (error) {
       console.error('Error fetching profile:', error)
       this.$toast.add({
@@ -58,14 +52,13 @@ export default {
       try {
         const token = Cookies.get('authToken')
         const response = await axios.put(
-          `${ApiAddress}api/update-volunteer?volunteerCommonUserId=${this.model.commonUserId}`,
+          `${ApiAddress}api/update-organization?organizationCommonUserId=${this.model.commonUserId}`,
           {
-            firstName: this.model.firstName,
-            lastName: this.model.lastName,
+            name: this.model.name,
             photoPath: this.model.photoPath,
-            birthDate: new Date(this.model.birthDate).toISOString(),
-            about: this.model.about,
-            participationCount: this.model.participationCount
+            legalAddress: this.model.legalAddress,
+            website: this.model.website,
+            workingHours: this.model.workingHours
           },
           {
             headers: {
@@ -74,7 +67,7 @@ export default {
           }
         )
 
-        this.$router.push('/volunteer-profile')
+        this.$router.push('/organization-profile')
       } catch (error) {
         console.error('Error updating profile:', error)
       }
@@ -93,39 +86,35 @@ export default {
               <div class="heading">Редактирование профиля</div>
               <form @submit.prevent="updateProfile">
                 <div>
-                  <label for="firstName">Имя:</label>
-                  <input v-model="model.firstName" id="firstName" type="text" />
-                </div>
-                <div>
-                  <label for="lastName">Фамилия:</label>
-                  <input v-model="model.lastName" id="lastName" type="text" />
+                  <label for="name">Имя организации:</label>
+                  <input v-model="model.name" id="name" type="text" />
                 </div>
                 <div>
                   <label for="photoPath">Путь к фото профиля:</label>
                   <input v-model="model.photoPath" id="photoPath" type="text" />
                 </div>
                 <div>
-                  <label for="about">О себе:</label>
-                  <textarea v-model="model.about" id="about"></textarea>
+                  <label for="legalAddress">Адрес организации:</label>
+                  <input v-model="model.legalAddress" id="legalAddress" type="text" />
+                </div>
+                <div>
+                  <label for="website">Веб-сайт организации:</label>
+                  <input v-model="model.website" id="website" type="text" />
+                </div>
+                <div>
+                  <label for="workingHours">Количество рабочих часов:</label>
+                  <input v-model="model.workingHours" id="workingHours" type="text" />
                 </div>
                 <button type="submit">Сохранить</button>
               </form>
-              <!-- <p class="text" v-show="model.about">
-                {{ model.about }}
-              </p>
-              <br />
-              <p class="text">Дата рождения: {{ model.birthDate }}</p>
-              <p class="text">Электронная почта: {{ model.email }}</p>              
-              <p class="text">Количество часов: {{ model.participationCount }}</p>
-              <br />
-              <a class="event__btn" @click="$router.push('/events')">Редактировать профиль</a> -->
             </div>
           </div>
         </div>
       </div>
       <div class="col-md-6 d-flex justify-content-center align-items-center">
         <div class="image-container">
-          <img alt="Profile picture" :src="model.photoPath" />
+          <!-- TODO: photoPath -->
+          <img alt="placeholder" src="/placeholder.png" />
         </div>
       </div>
     </div>

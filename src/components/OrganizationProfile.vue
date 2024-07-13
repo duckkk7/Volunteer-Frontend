@@ -64,6 +64,10 @@ export default {
               <p class="text">Адрес организации: {{ model.legalAddress }}</p>
               <p class="text">Сайт организации: {{ model.website }}</p>
               <p class="text">Количество рабочих часов: {{ model.workingHours }}</p>
+              <br />
+              <a class="event__btn" @click="$router.push('/organization-profile/edit')"
+                >Редактировать профиль</a
+              >
             </div>
           </div>
         </div>
@@ -71,7 +75,7 @@ export default {
       <div class="col-md-6 d-flex justify-content-center align-items-center">
         <div class="image-container">
           <!-- TODO: photoPath -->
-          <img alt="placeholder" src="/placeholder.png" />
+          <img alt="Profile picture" :src="model.photoPath" />
         </div>
       </div>
     </div>
@@ -215,5 +219,21 @@ export default {
   width: 80%;
   height: 700px;
   object-fit: contain;
+}
+
+.event__btn:hover {
+  background-color: #ff4081;
+  color: white;
+}
+
+.event__btn {
+  width: 10%;
+  border: 1px solid #ff4081;
+  border-radius: 10px;
+  padding: 1%; /* Отступы изнутри */
+  box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.2);
+  text-align: center;
+  margin-bottom: 5%;
+  color: #333333;
 }
 </style>

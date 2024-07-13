@@ -2,8 +2,7 @@
 import axios from 'axios'
 import { ApiAddress } from '@/common.ts'
 import Cookies from 'js-cookie'
-
-// TODO: Functionality of "Записаться"
+import { jwtDecode } from 'jwt-decode'
 
 export default {
   name: 'event-detail',
@@ -20,11 +19,17 @@ export default {
         city: '',
         description: '',
         coverLetter: ''
-      }
+      },
+      applications: [],
+      userRole: ''
     }
   },
   async created() {
     await this.fetchEventData()
+    this.checkUserRole()
+    if (this.userRole === 'Organization') {
+      await this.fetchApplications()
+    }
   },
   watch: {
     '$route.params.id': 'fetchEventData'
@@ -92,6 +97,66 @@ export default {
           this.showError('Ошибка сети. Попробуйте позже.')
         }
       }
+    },
+    async fetchApplications() {
+      try {
+        const token = Cookies.get('authToken')
+        const response = await axios.get(
+          `${ApiAddress}api/Application/GetApplicationsByEventId/${this.$route.params.id}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`
+            }
+          }
+        )
+        this.applications = response.data
+      } catch (error) {
+        console.error('Error fetching applications:', error)
+      }
+    },
+    async acceptApplication(applicationId) {
+      try {
+        const token = Cookies.get('authToken')
+        // FIXME: КОГДА ИСПРАВЯТ APLICATION ПОМЕНЯТЬ У СЕБЯ ТОЖЕ ЗДЕСЬ
+        await axios.put(
+          `${ApiAddress}api/Application/AcceptAplication/${applicationId}`,
+          {},
+          {
+            headers: {
+              Authorization: `Bearer ${token}`
+            }
+          }
+        )
+        alert('Заявка одобрена')
+        await this.fetchApplications()
+      } catch (error) {
+        console.error('Error accepting application:', error)
+      }
+    },
+    async rejectApplication(applicationId) {
+      try {
+        const token = Cookies.get('authToken')
+        await axios.put(
+          `${ApiAddress}api/Application/RejectAplication/${applicationId}`,
+          {},
+          {
+            headers: {
+              Authorization: `Bearer ${token}`
+            }
+          }
+        )
+        alert('Заявка отклонена')
+        await this.fetchApplications()
+      } catch (error) {
+        console.error('Error rejecting application:', error)
+      }
+    },
+    checkUserRole() {
+      const token = Cookies.get('authToken')
+      if (token) {
+        const decodedToken = jwtDecode(token)
+        this.userRole = decodedToken.role
+      }
     }
   }
 }
@@ -140,6 +205,19 @@ export default {
               placeholder="Текст заявки"
             />
           </div>
+        </div>
+      </div>
+      <div v-if="userRole === 'Organization'">
+        <div class="heading">Заявки</div>
+        <div v-for="application in applications" :key="application.applicationId">
+          <p>Название события: {{ application.eventTitle }}</p>
+          <p>Имя волонтера: {{ application.volunteerName }}</p>
+          <p>Сопроводительное письмо: {{ application.coverLetter }}</p>
+          <p>Дата: {{ new Date(application.date).toLocaleDateString() }}</p>
+          <p>Статус: {{ application.status }}</p>
+          <!-- FIXME: application.id => event.id -->
+          <button @click="acceptApplication(application.applicationId)">Принять</button>
+          <button @click="rejectApplication(application.applicationId)">Отклонить</button>
         </div>
       </div>
     </div>

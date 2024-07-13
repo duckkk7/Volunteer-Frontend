@@ -27,8 +27,7 @@ export default {
   async created() {
     try {
       const token = Cookies.get('authToken')
-      //   TODO: Измени на volunteer-profile когда на бэке исправят
-      const response = await axios.get(ApiAddress + 'api/voluteer-profile', {
+      const response = await axios.get(ApiAddress + 'api/volunteer-profile', {
         headers: {
           Authorization: `Bearer ${token}`
         }
@@ -72,8 +71,8 @@ export default {
               </p>
               <br />
               <p class="text">Дата рождения: {{ model.birthDate }}</p>
-              <p class="text">Электронная почта: {{ model.email }}</p>
-              <!-- <p class="text">Номер телефона: {{ model.phoneNumber }}</p> -->
+              <!-- FIXME: эндопинт не выдает почту -->
+              <!-- <p class="text">Электронная почта: {{ model.email }}</p> -->
               <p class="text">Количество часов: {{ model.participationCount }}</p>
               <br />
               <a class="event__btn" @click="$router.push('/volunteer-profile/edit')"

@@ -4,7 +4,6 @@
       <div class="navigation">
         <div class="button" @click="$router.push('/#')">О нас</div>
         <div class="button" @click="$router.push('/events')">Мероприятия</div>
-        <!-- TODO: Профиль волонтера или организации в зависимости от роли в JWT токене -->
         <div class="button" @click="$router.push('/register/event')">Создать мероприятие</div>
         <div class="button" @click="navigateToProfile">Профиль</div>
       </div>
