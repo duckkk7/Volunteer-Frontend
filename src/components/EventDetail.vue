@@ -18,7 +18,8 @@ export default {
         endDate: '',
         city: '',
         description: '',
-        coverLetter: ''
+        coverLetter: '',
+        organization: null
       },
       applications: [],
       userRole: ''
@@ -61,6 +62,7 @@ export default {
         })
         this.model.city = response.data.city
         this.model.description = response.data.description
+        this.model.organization = response.data.organization
 
         console.log(response.data)
         console.log('this works')
@@ -117,9 +119,8 @@ export default {
     async acceptApplication(applicationId) {
       try {
         const token = Cookies.get('authToken')
-        // FIXME: КОГДА ИСПРАВЯТ APLICATION ПОМЕНЯТЬ У СЕБЯ ТОЖЕ ЗДЕСЬ
         await axios.put(
-          `${ApiAddress}api/Application/AcceptAplication/${applicationId}`,
+          `${ApiAddress}api/Application/AcceptApplication/${applicationId}`,
           {},
           {
             headers: {
@@ -137,7 +138,7 @@ export default {
       try {
         const token = Cookies.get('authToken')
         await axios.put(
-          `${ApiAddress}api/Application/RejectAplication/${applicationId}`,
+          `${ApiAddress}api/Application/RejectApplication/${applicationId}`,
           {},
           {
             headers: {
@@ -149,6 +150,43 @@ export default {
         await this.fetchApplications()
       } catch (error) {
         console.error('Error rejecting application:', error)
+      }
+    },
+    async subscibeToOrganization() {
+      try {
+        const token = Cookies.get('authToken')
+        await axios.put(
+          `${ApiAddress}api/Subscription/Subscribe?organizationId=${this.model.organization.commonUserId}`,
+          {},
+          {
+            headers: {
+              Authorization: `Bearer ${token}`
+            }
+          }
+        )
+        alert('Вы подписались на организацию')
+      } catch (error) {
+        console.error('Error subscribing to organization:', error)
+      }
+    },
+    async deleteEvent() {
+      try {
+        const token = Cookies.get('authToken')
+        await axios.delete(`${ApiAddress}api/Delete/${this.model.id}`, {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        })
+        this.$router.push('/events')
+      } catch (error) {
+        console.error('Error deleting event:', error)
+      }
+    },
+    async editEvent(eventId) {
+      try {
+        this.$router.push(`/event/${eventId}/edit`)
+      } catch (error) {
+        console.error('Error editing event:', error)
       }
     },
     checkUserRole() {
@@ -195,6 +233,14 @@ export default {
         <div class="card">
           <img src="/event-picture.jpg" alt="event-picture" class="placeholder-image" />
           <button class="rose-button" @click="applyToEvent">Записаться</button>
+          <button class="blue-button" @click="subscibeToOrganization">
+            Подписаться на организацию
+          </button>
+          <div v-if="userRole === 'Organization'">
+            <button class="blue-button" @click="editEvent(model.id)">Редактировать</button>
+            <br />
+            <button class="blue-button" @click="deleteEvent">Удалить событие</button>
+          </div>
           <div class="div-wrapper">
             <!-- <input class="form-control" type="text" v-model="model.firstName" /> -->
             <textarea
@@ -215,7 +261,6 @@ export default {
           <p>Сопроводительное письмо: {{ application.coverLetter }}</p>
           <p>Дата: {{ new Date(application.date).toLocaleDateString() }}</p>
           <p>Статус: {{ application.status }}</p>
-          <!-- FIXME: application.id => event.id -->
           <button @click="acceptApplication(application.applicationId)">Принять</button>
           <button @click="rejectApplication(application.applicationId)">Отклонить</button>
         </div>
@@ -387,6 +432,30 @@ export default {
   align-items: center;
   align-self: stretch;
   background-color: #ff4081;
+  border-radius: 10px;
+  border: 0;
+  box-shadow: 0 4px 4px #00000040;
+  display: flex;
+  flex: 0 0 auto;
+  gap: 8px;
+  justify-content: center;
+  overflow: hidden;
+  padding: 12px 24px;
+  position: relative;
+  width: 100%;
+  color: #f5f5f5;
+  font-family: sans-serif;
+  font-size: 18px;
+  font-weight: 400;
+  letter-spacing: 0;
+  line-height: 24px;
+  white-space: nowrap;
+}
+
+.blue-button {
+  align-items: center;
+  align-self: stretch;
+  background-color: #2381da;
   border-radius: 10px;
   border: 0;
   box-shadow: 0 4px 4px #00000040;

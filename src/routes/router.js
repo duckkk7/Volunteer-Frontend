@@ -10,6 +10,7 @@ import Events from '@/components/Events.vue'
 import OrganizationProfile from '@/components/OrganizationProfile.vue'
 import VolunteerProfileEdit from '@/components/VolunteerProfileEdit.vue'
 import OrganizationProfileEdit from '@/components/OrganizationProfileEdit.vue'
+import EventEdit from '@/components/EventEdit.vue'
 
 const routes = [
   {
@@ -67,6 +68,11 @@ const routes = [
     path: '/organization-profile/edit',
     name: 'organization-profile-edit',
     component: OrganizationProfileEdit
+  },
+  {
+    path: '/event/:id/edit',
+    name: 'event-edit',
+    component: EventEdit
   }
 ]
 

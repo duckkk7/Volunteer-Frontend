@@ -84,7 +84,7 @@ export default {
       </div>
       <div class="col-md-6 d-flex justify-content-center align-items-center">
         <div class="image-container">
-          <img alt="Profile picture" :src="model.photoPath" />
+          <img alt="Profile picture" :src="model.photoPath || '/profile-default.png'" />
         </div>
       </div>
     </div>

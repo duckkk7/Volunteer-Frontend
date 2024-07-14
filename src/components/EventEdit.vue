@@ -10,11 +10,11 @@
       <div class="col-md-6 d-flex justify-content-center align-items-center">
         <div class="event-reg-event-registration">
           <div class="event-reg-section-title">
-            <div class="heading">Публикация события</div>
-            <p class="text">Расскажите о Вашей идее всему миру!</p>
+            <div class="heading">Редактирование события</div>
+            <p class="text">Внесите изменения в мероприятие</p>
           </div>
 
-          <form @submit.prevent="createEvent" class="event-reg-form">
+          <form @submit.prevent="updateEvent()" class="event-reg-form">
             <div class="event-reg-input">
               <div class="text-wrapper">Название</div>
               <input class="form-control" type="text" v-model="model.title" />
@@ -41,7 +41,7 @@
               <textarea class="form-control" rows="3" v-model="model.description"></textarea>
             </div>
 
-            <button class="publish-button">Опубликовать</button>
+            <button class="publish-button">Сохранить изменения</button>
           </form>
         </div>
       </div>
@@ -61,7 +61,7 @@ import { ApiAddress } from '@/common.ts'
 import Cookies from 'js-cookie'
 
 export default {
-  name: 'new-event',
+  name: 'edit-event',
   data() {
     return {
       model: {
@@ -74,8 +74,30 @@ export default {
       }
     }
   },
+  async created() {
+    try {
+      const eventId = this.$route.params.id
+      const token = Cookies.get('authToken')
+      const response = await axios.get(ApiAddress + 'api/GetById/' + eventId, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      })
+
+      this.model.id = response.data.id
+      this.model.title = response.data.title
+      this.model.startDate = new Date(response.data.startDate).toISOString().slice(0, 16)
+      this.model.endDate = new Date(response.data.endDate).toISOString().slice(0, 16)
+      this.model.city = response.data.city
+      this.model.description = response.data.description
+
+      //   await this.updateEvent()
+    } catch (error) {
+      console.error(error)
+    }
+  },
   methods: {
-    async createEvent() {
+    async updateEvent() {
       try {
         const token = Cookies.get('authToken')
 
@@ -83,8 +105,8 @@ export default {
         const startDateUTC = new Date(this.model.startDate).toISOString()
         const endDateUTC = new Date(this.model.endDate).toISOString()
 
-        const response = await axios.post(
-          ApiAddress + 'api/CreateEvent',
+        const response = await axios.put(
+          ApiAddress + 'api/UpdateEvent/' + this.model.id,
           {
             title: this.model.title,
             startDate: startDateUTC,
@@ -103,7 +125,7 @@ export default {
 
         console.log(response.data)
         console.log(response.data.id)
-        this.$router.push(`/event/${response.data.id}`)
+        this.$router.push(`/event/${this.model.id}`)
       } catch (error) {
         // Ошибка запроса
         if (error.response) {
