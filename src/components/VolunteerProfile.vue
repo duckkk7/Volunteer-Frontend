@@ -19,9 +19,12 @@ export default {
         participationCount: null,
         email: '',
         phoneNumber: ''
-        // applications: null,
-        // subscriptions: null
-      }
+      },
+      invitations: [],
+      subscriptions: []
+
+      // applications: null,
+      // subscriptions: null
     }
   },
   async created() {
@@ -45,6 +48,8 @@ export default {
       this.model.participationCount = response.data.participationCount
       //   this.model.applications = response.data.applications
       //   this.model.subscriptions = response.data.subscriptions
+      await this.getInvitations()
+      await this.getSubscriptions()
     } catch (error) {
       console.error('Error fetching profile:', error)
       this.$toast.add({
@@ -53,6 +58,55 @@ export default {
         detail: 'Не удалось загрузить профиль',
         life: 3000
       })
+    }
+  },
+  methods: {
+    async getInvitations() {
+      try {
+        const token = Cookies.get('authToken')
+        const response = await axios.get(
+          ApiAddress + 'api/Invitation/GetAllInvitationsForVolunteer',
+          {
+            headers: {
+              Authorization: `Bearer ${token}`
+            }
+          }
+        )
+        this.invitations = response.data
+      } catch (error) {
+        console.error('Error fetching invitations:', error)
+      }
+    },
+    async getSubscriptions() {
+      try {
+        const token = Cookies.get('authToken')
+        const response = await axios.get(ApiAddress + 'api/Subscription/MySubscriptions', {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        })
+        this.subscriptions = response.data
+      } catch (error) {
+        console.error('Error fetching subscriptions:', error)
+      }
+    },
+    async acceptInvitation(invitationId) {
+      try {
+        const token = Cookies.get('authToken')
+        await axios.post(
+          ApiAddress + `api/Subscription/AcceptInvitation/${invitationId}`,
+          {},
+          {
+            headers: {
+              Authorization: `Bearer ${token}`
+            }
+          }
+        )
+        alert(`Вы успешно вступили в организацию`)
+        await this.getInvitations()
+      } catch (error) {
+        console.error('Error accepting invitation:', error)
+      }
     }
   }
 }
@@ -78,6 +132,23 @@ export default {
               <a class="event__btn" @click="$router.push('/volunteer-profile/edit')"
                 >Редактировать профиль</a
               >
+            </div>
+            <br />
+            <div class="invitations">
+              <div class="heading">Мои приглашения</div>
+              <div v-for="invitation in invitations" :key="invitation.invitationId">
+                <p>Название организации: {{ invitation.organizationName }}</p>
+                <p>Статус: {{ invitation.status }}</p>
+                <button @click="acceptInvitation(invitation.invitationId)">
+                  Вступить в организацию
+                </button>
+              </div>
+            </div>
+            <div class="subscriptions">
+              <div class="heading">Мои подписки</div>
+              <div v-for="subscription in subscriptions" :key="subscription.subscriptionId">
+                <p>Название организации: {{ subscription.organizationName }}</p>
+              </div>
             </div>
           </div>
         </div>

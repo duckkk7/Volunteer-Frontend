@@ -4,7 +4,7 @@ import { ApiAddress } from '@/common.ts'
 import Cookies from 'js-cookie'
 
 export default {
-  name: 'profile',
+  name: 'profile-id',
   data() {
     return {
       model: {
@@ -23,34 +23,61 @@ export default {
     }
   },
   async created() {
-    try {
-      const token = Cookies.get('authToken')
-      const response = await axios.get(ApiAddress + 'api/volunteer-profile/id', {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      })
+    await this.fetchVolunteerProfile()
+  },
+  methods: {
+    async fetchVolunteerProfile() {
+      try {
+        const token = Cookies.get('authToken')
+        const response = await axios.get(
+          ApiAddress + `api/volunteer-profile/${this.$route.params.id}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`
+            }
+          }
+        )
 
-      // Populate the model with the response data
-      this.model.commonUserId = response.data.commonUserId
-      this.model.firstName = response.data.firstName
-      this.model.lastName = response.data.lastName
-      this.model.email = response.data.email
-      this.model.photoPath = response.data.photoPath
-      this.model.phoneNumber = response.data.phoneNumber
-      this.model.birthDate = new Date(response.data.birthDate).toLocaleDateString()
-      this.model.about = response.data.about
-      this.model.participationCount = response.data.participationCount
-      //   this.model.applications = response.data.applications
-      //   this.model.subscriptions = response.data.subscriptions
-    } catch (error) {
-      console.error('Error fetching profile:', error)
-      this.$toast.add({
-        severity: 'error',
-        summary: 'Ошибка',
-        detail: 'Не удалось загрузить профиль',
-        life: 3000
-      })
+        // Populate the model with the response data
+        this.model.commonUserId = response.data.commonUserId
+        this.model.firstName = response.data.firstName
+        this.model.lastName = response.data.lastName
+        this.model.email = response.data.email
+        this.model.photoPath = response.data.photoPath
+        this.model.phoneNumber = response.data.phoneNumber
+        this.model.birthDate = new Date(response.data.birthDate).toLocaleDateString()
+        this.model.about = response.data.about
+        this.model.participationCount = response.data.participationCount
+        //   this.model.applications = response.data.applications
+        //   this.model.subscriptions = response.data.subscriptions
+      } catch (error) {
+        console.error('Error fetching profile:', error)
+        this.$toast.add({
+          severity: 'error',
+          summary: 'Ошибка',
+          detail: 'Не удалось загрузить профиль',
+          life: 3000
+        })
+      }
+    },
+    async inviteVolunteer() {
+      try {
+        const token = Cookies.get('authToken')
+        const response = await axios.post(
+          ApiAddress + `api/Invitation/CreateInvitation`,
+          {
+            volunteerId: this.$route.params.id
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`
+            }
+          }
+        )
+        alert('Вы успешно пригласили волонтера')
+      } catch (error) {
+        console.error('Error inviting volunteer:', error)
+      }
     }
   }
 }
@@ -73,9 +100,9 @@ export default {
               <!-- <p class="text">Электронная почта: {{ model.email }}</p> -->
               <p class="text">Количество часов: {{ model.participationCount }}</p>
               <br />
-              <a class="event__btn" @click="$router.push('/volunteer-profile/edit')"
-                >Редактировать профиль</a
-              >
+              <button class="blue-button" @click="inviteVolunteer">
+                Пригласить волонтера в организацию
+              </button>
             </div>
           </div>
         </div>
