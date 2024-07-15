@@ -76,6 +76,13 @@ export default {
         }
       }
     },
+    async openOrganizationProfile() {
+      try {
+        this.$router.push(`/organization-profile/${this.model.organizationId}`)
+      } catch (error) {
+        console.error('Error opening organization profile:', error)
+      }
+    },
     async applyToEvent() {
       try {
         const token = Cookies.get('authToken')
@@ -152,23 +159,23 @@ export default {
         console.error('Error rejecting application:', error)
       }
     },
-    async subscibeToOrganization() {
-      try {
-        const token = Cookies.get('authToken')
-        await axios.put(
-          `${ApiAddress}api/Subscription/Subscribe?organizationId=${this.model.organization.commonUserId}`,
-          {},
-          {
-            headers: {
-              Authorization: `Bearer ${token}`
-            }
-          }
-        )
-        alert('Вы подписались на организацию')
-      } catch (error) {
-        console.error('Error subscribing to organization:', error)
-      }
-    },
+    // async subscibeToOrganization() {
+    //   try {
+    //     const token = Cookies.get('authToken')
+    //     await axios.put(
+    //       `${ApiAddress}api/Subscription/Subscribe?organizationId=${this.model.organization.commonUserId}`,
+    //       {},
+    //       {
+    //         headers: {
+    //           Authorization: `Bearer ${token}`
+    //         }
+    //       }
+    //     )
+    //     alert('Вы подписались на организацию')
+    //   } catch (error) {
+    //     console.error('Error subscribing to organization:', error)
+    //   }
+    // },
     async deleteEvent() {
       try {
         const token = Cookies.get('authToken')
@@ -213,7 +220,9 @@ export default {
           <div class="inputs">
             <div class="text-wrapper">Основная информация</div>
             <div class="input">
-              <div class="div">Организатор: {{ model.organizationName }}</div>
+              <div class="div">
+                <a @click="openOrganizationProfile">Организатор: {{ model.organizationName }}</a>
+              </div>
               <div class="div">Город: {{ model.city }}</div>
               <div class="div">
                 Дата и время: с {{ model.startDate }} {{ model.startTime }} по {{ model.endDate }}
