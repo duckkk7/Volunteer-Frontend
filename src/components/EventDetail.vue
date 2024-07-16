@@ -257,7 +257,7 @@ export default {
       </div>
       <div class="applications" v-if="userRole === 'Organization'">
         <div class="heading">Заявки</div>
-        <div v-for="application in applications" :key="application.applicationId">
+        <div class="app-text" v-for="application in applications" :key="application.applicationId">
           <p>Название события: {{ application.eventTitle }}</p>
           <p>
             Имя волонтера:
@@ -268,8 +268,12 @@ export default {
           <p>Сопроводительное письмо: {{ application.coverLetter }}</p>
           <p>Дата: {{ new Date(application.date).toLocaleDateString() }}</p>
           <p>Статус: {{ application.status }}</p>
-          <button @click="acceptApplication(application.applicationId)">Принять</button>
-          <button @click="rejectApplication(application.applicationId)">Отклонить</button>
+          <button class="apply-button" @click="acceptApplication(application.applicationId)">
+            Принять
+          </button>
+          <button class="reject-button" @click="rejectApplication(application.applicationId)">
+            Отклонить
+          </button>
         </div>
       </div>
     </div>
@@ -417,7 +421,7 @@ export default {
   display: flex;
   flex-direction: column;
   gap: 24px;
-  height: 800px;
+  height: 700px;
   justify-content: center;
   padding: 20px;
   position: relative;
@@ -508,5 +512,69 @@ export default {
 }
 
 .applications {
+  /* align-items: center; */
+  align-self: stretch;
+  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 10px;
+  /* gap: 14px; */
+  /* height: 246px; */
+  /* margin-bottom: -2px; */
+  /* position: relative; */
+  /* width: 100%; */
+}
+
+.applications .app-text {
+  margin-left: 12%;
+  margin-bottom: 2%;
+}
+
+.apply-button {
+  background-color: #2ca836;
+  border-radius: 10px;
+  border: 0;
+  box-shadow: 0 4px 4px #00000040;
+  display: flex;
+  flex-direction: row;
+  flex: 0 0 auto;
+  gap: 8px;
+  justify-content: center;
+  overflow: hidden;
+  padding: 12px 24px;
+  position: relative;
+  width: 10%;
+  color: #f5f5f5;
+  font-family: sans-serif;
+  font-size: 18px;
+  font-weight: 400;
+  letter-spacing: 0;
+  line-height: 24px;
+  white-space: nowrap;
+}
+
+.reject-button {
+  align-items: center;
+  align-self: stretch;
+  background-color: #d8531e;
+  border-radius: 10px;
+  border: 0;
+  box-shadow: 0 4px 4px #00000040;
+  display: flex;
+  flex-direction: row;
+  flex: 0 0 auto;
+  gap: 8px;
+  justify-content: center;
+  overflow: hidden;
+  padding: 12px 24px;
+  position: relative;
+  width: 10%;
+  color: #f5f5f5;
+  font-family: sans-serif;
+  font-size: 18px;
+  font-weight: 400;
+  letter-spacing: 0;
+  line-height: 24px;
+  white-space: nowrap;
 }
 </style>
