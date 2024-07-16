@@ -229,7 +229,11 @@ export default {
           <div class="inputs-2">
             <div class="text-wrapper">Описание</div>
             <div class="div-wrapper">
-              <div class="div">{{ model.description }}</div>
+              <div class="div">
+                <div class="description">
+                  {{ model.description }}
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -412,6 +416,7 @@ export default {
   position: relative;
   width: 100%;
   height: 100%;
+  overflow: scroll;
 }
 
 .event-detail-page .card {
@@ -428,6 +433,10 @@ export default {
   width: 380px;
   border: 0;
   margin-top: 44px;
+}
+
+.event-detail-page .description {
+  /* white-space: nowrap; */
 }
 
 .event-detail-page .placeholder-image {
