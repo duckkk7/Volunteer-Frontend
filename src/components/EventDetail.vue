@@ -123,6 +123,19 @@ export default {
         console.error('Error fetching applications:', error)
       }
     },
+    async fetchVolunteerId(applicationId) {
+      try {
+        const token = Cookies.get('authToken')
+        const response = await axios.get(`${ApiAddress}api/Application/GetById/${applicationId}`, {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        })
+        return response.data.volunteerId
+      } catch (error) {
+        console.error('Error fetching application:', error)
+      }
+    },
     async acceptApplication(applicationId) {
       try {
         const token = Cookies.get('authToken')
@@ -159,23 +172,6 @@ export default {
         console.error('Error rejecting application:', error)
       }
     },
-    // async subscibeToOrganization() {
-    //   try {
-    //     const token = Cookies.get('authToken')
-    //     await axios.put(
-    //       `${ApiAddress}api/Subscription/Subscribe?organizationId=${this.model.organization.commonUserId}`,
-    //       {},
-    //       {
-    //         headers: {
-    //           Authorization: `Bearer ${token}`
-    //         }
-    //       }
-    //     )
-    //     alert('Вы подписались на организацию')
-    //   } catch (error) {
-    //     console.error('Error subscribing to organization:', error)
-    //   }
-    // },
     async deleteEvent() {
       try {
         const token = Cookies.get('authToken')
@@ -242,13 +238,10 @@ export default {
         <div class="card">
           <img src="/event-picture.jpg" alt="event-picture" class="placeholder-image" />
           <button class="rose-button" @click="applyToEvent">Записаться</button>
-          <button class="blue-button" @click="subscibeToOrganization">
-            Подписаться на организацию
-          </button>
           <div v-if="userRole === 'Organization'">
             <button class="blue-button" @click="editEvent(model.id)">Редактировать</button>
             <br />
-            <button class="blue-button" @click="deleteEvent">Удалить событие</button>
+            <button class="red-button" @click="deleteEvent">Удалить событие</button>
           </div>
           <div class="div-wrapper">
             <!-- <input class="form-control" type="text" v-model="model.firstName" /> -->
@@ -262,11 +255,16 @@ export default {
           </div>
         </div>
       </div>
-      <div v-if="userRole === 'Organization'">
+      <div class="applications" v-if="userRole === 'Organization'">
         <div class="heading">Заявки</div>
         <div v-for="application in applications" :key="application.applicationId">
           <p>Название события: {{ application.eventTitle }}</p>
-          <p>Имя волонтера: {{ application.volunteerName }}</p>
+          <p>
+            Имя волонтера:
+            <a @click="$router.push(`/volunteer-profile/${application.volunteerId}`)">{{
+              application.volunteerName
+            }}</a>
+          </p>
           <p>Сопроводительное письмо: {{ application.coverLetter }}</p>
           <p>Дата: {{ new Date(application.date).toLocaleDateString() }}</p>
           <p>Статус: {{ application.status }}</p>
@@ -281,7 +279,7 @@ export default {
 <style scoped>
 .event-detail-page {
   align-items: center;
-  background-color: #ebebeb;
+  /* background-color: #ebebeb; */
   display: grid;
   gap: 34px;
   padding: 150px 64px;
@@ -419,7 +417,7 @@ export default {
   display: flex;
   flex-direction: column;
   gap: 24px;
-  height: 600px;
+  height: 800px;
   justify-content: center;
   padding: 20px;
   position: relative;
@@ -440,7 +438,7 @@ export default {
 .event-detail-page .rose-button {
   align-items: center;
   align-self: stretch;
-  background-color: #ff4081;
+  background-color: #2ca836;
   border-radius: 10px;
   border: 0;
   box-shadow: 0 4px 4px #00000040;
@@ -483,5 +481,32 @@ export default {
   letter-spacing: 0;
   line-height: 24px;
   white-space: nowrap;
+}
+
+.red-button {
+  align-items: center;
+  align-self: stretch;
+  background-color: #da235a;
+  border-radius: 10px;
+  border: 0;
+  box-shadow: 0 4px 4px #00000040;
+  display: flex;
+  flex: 0 0 auto;
+  gap: 8px;
+  justify-content: center;
+  overflow: hidden;
+  padding: 12px 24px;
+  position: relative;
+  width: 100%;
+  color: #f5f5f5;
+  font-family: sans-serif;
+  font-size: 18px;
+  font-weight: 400;
+  letter-spacing: 0;
+  line-height: 24px;
+  white-space: nowrap;
+}
+
+.applications {
 }
 </style>
