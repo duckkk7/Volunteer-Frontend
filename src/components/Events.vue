@@ -39,7 +39,7 @@ export default {
         const newEvents = response.data.map((event) => ({
           id: event.id,
           title: event.title,
-          image: event.photoPath || '/public/vol-reg-picture.png', // Default image if photoPath is null
+          photoPath: event.photoPath, // Default image if photoPath is null
           startDate: new Date(event.startDate).toLocaleDateString(),
           startTime: new Date(event.startDate).toLocaleTimeString([], {
             hour: '2-digit',
@@ -118,7 +118,7 @@ export default {
             @click="$router.push(`/event/${event.id}`)"
           >
             <div class="event__block">
-              <img src="/public/vol-reg-picture.png" alt="img" />
+              <img :src="event.photoPath ? `${event.photoPath}` : '/public/vol-reg-picture.png'" alt="img" />
               <div class="event__info">
                 <div class="info__title">{{ event.title }}</div>
                 <div class="info__org">{{ event.organization }}</div>
