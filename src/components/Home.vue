@@ -52,7 +52,7 @@ export default {
     <main>
       <div class="screenWithBack">
         <div class="firstScreen">
-          <div class="slogan__1">Добро пожаловать в единое волонтерское движение</div>
+          <div class="slogan__1">Добро пожаловать в Единое волонтерское движение</div>
           <div class="slogan__2">Творить добро и делать мир лучше</div>
           <div class="btn__con">
             <a class="btn__vol" @click="$router.push('/register')">Волонтер</a>
