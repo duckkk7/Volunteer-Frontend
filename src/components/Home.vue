@@ -1,5 +1,48 @@
-<script setup>
-import Events from './Events.vue'
+<script>
+import axios from 'axios'
+import { ApiAddress } from '@/common.ts'
+
+export default {
+  name: 'events',
+  data() {
+    return {
+      events: []
+    }
+  },
+  created() {
+    this.fetchEvents()
+  },
+  methods: {
+    async fetchEvents() {
+      try {
+        const maxEvents = 4; // Максимальное количество событий
+        const response = await axios.get(`${ApiAddress}api/GetAllEvents`)
+        console.log(response.data)
+        this.events = response.data
+          .slice(0, maxEvents) // Ограничение массива событий до указанного количества
+          .map((event) => ({
+          id: event.id,
+          title: event.title,
+          image: event.photoPath || '/public/vol-reg-picture.png', // Default image if photoPath is null
+          startDate: new Date(event.startDate).toLocaleDateString(),
+          startTime: new Date(event.startDate).toLocaleTimeString([], {
+            hour: '2-digit',
+            minute: '2-digit'
+          }),
+          endDate: new Date(event.endDate).toLocaleDateString(),
+          endTime: new Date(event.endDate).toLocaleTimeString([], {
+            hour: '2-digit',
+            minute: '2-digit'
+          }),
+          city: event.city,
+          organizationId: event.organizationId
+        }))
+      } catch (error) {
+        console.error('Error fetching events:', error)
+      }
+    }
+  }
+}
 </script>
 
 <!-- TODO: Растянуть по всему экрану, чтобы было по центру инфа, подчистить по возможности стили -->
@@ -9,16 +52,43 @@ import Events from './Events.vue'
     <main>
       <div class="screenWithBack">
         <div class="firstScreen">
-          <div class="slogan__1">Добро пожаловать в единое волонтерское движение!</div>
-          <div class="slogan__2">Творить добро и делать мир лучше!</div>
+          <div class="slogan__1">Добро пожаловать в единое волонтерское движение</div>
+          <div class="slogan__2">Творить добро и делать мир лучше</div>
           <div class="btn__con">
             <a class="btn__vol" @click="$router.push('/register')">Волонтер</a>
             <a class="btn__org" @click="$router.push('/register/organization')">Организация</a>
           </div>
         </div>
       </div>
-      <Events />
+
       <div class="secondScreen">
+        <div class="slogan__2 sc__title">
+          Добрые дела рядом с вами
+        </div>
+        <div class="event__con">
+          <a
+            v-for="event in events.slice(0, 4)"
+            :key="event.id"
+            @click="$router.push(`/event/${event.id}`)"
+          >
+            <div class="event__block">
+              <img src="/public/vol-reg-picture.png" alt="img" />
+              <div class="event__info">
+                <div class="info__title">{{ event.title }}</div>
+                <div class="info__org">{{ event.organization }}</div>
+                <div class="event__date">
+                  <div class="info__date">
+                    {{ event.startDate }} - {{ event.endDate }}
+                  </div>
+                  <div class="info__time">
+                    {{ event.startTime }} - {{ event.endTime }}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </a>
+        </div>
+
         <a class="event__btn" @click="$router.push('/events')">Посмотреть все</a>
       </div>
     </main>
@@ -27,9 +97,9 @@ import Events from './Events.vue'
 
 <style scoped>
 .body {
-  width: 80vw;
-  margin: 0;
-  margin-top: 100px;
+  margin-top: 80px;
+  margin-left: auto;
+  margin-bottom: auto;
   font-family: sans-serif;
   background-color: #f0f8ff;
 }
@@ -70,33 +140,32 @@ header a {
 /* -&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;style for main&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45; */
 
 .screenWithBack {
-  width: 100vw;
+  height: 320px; /* уменьшаем высоту блока с фоновым изображением */
+  background-size: contain; /* изменяем размер фона */
   background-image: url('/header-background.jpg');
-  background-size: cover;
   background-position: center;
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
+  box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.2);
 }
 
 .firstScreen {
-  display: flex;
-  flex-direction: column;
-  /* align-items: center; */
   padding: 5% 10%;
-  margin: -15px 0 2% 0;
 }
 
 .slogan__1 {
-  font-size: 60px;
+  font-size: 46px;
   font-weight: 700;
-  width: 70%;
+  width: 90%;
+  font-family: "Bauhaus 93", monospace;
 }
 
 .slogan__2 {
   font-size: 32px;
   color: #333333;
-  margin: 2% 0 3% 0;
+  margin: 0 0 2% 0;
+  font-family: "Bauhaus 93", monospace;
 }
 
 .btn__vol,
@@ -127,12 +196,11 @@ header a {
 
 .secondScreen {
   width: 100%;
-  margin: 0 auto;
-  display: flex;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 55px;
+  display: grid;
   justify-content: center;
-  align-items: center;
-  /* justify-items: center; */
-  flex-direction: column;
 }
 
 .secondScreen a {
@@ -144,19 +212,26 @@ header a {
 
 .event__con {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
+  align-items: center;
   flex-wrap: wrap; /* Чтобы те блоки, которые не влезают в строку, опускались вниз */
-  margin: 2% 0 3% 0;
+  /* margin: 2% 0 3% 0; */
+  margin-top: 25px;
+  gap: 15px;
 }
 
 .event__block {
   width: 100%;
   display: grid;
-  padding: 3%;
+  padding: 8%;
+  margin-bottom: 10%;
   border-radius: 15px;
   background-color: white;
-  margin-bottom: 10%;
   box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.2);
+  min-width: 300px; /* Минимальная ширина для элемента */
+  min-height: 420px; /* Минимальная высота для элемента */
+  max-height: 421px;
+  max-width: 301px;
 }
 
 .event__block img {
@@ -165,21 +240,22 @@ header a {
 }
 
 .info__title {
-  font-size: 24px;
+  font-size: 18px;
+  font-weight: 500;
+  font-family: Verdana, Arial, Helvetica, sans-serif;
   line-height: 30px; /* Межстрочный интервал */
-  font-weight: 600;
   margin: 5% 0;
 }
 
 .event__date {
   display: flex;
+  font-size: 12px;
   margin-top: 5%;
 }
 
 .info__time {
   margin-left: 50px;
 }
-
 .event__btn {
   width: 10%;
   border: 1px solid #ff4081;

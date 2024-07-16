@@ -6,18 +6,37 @@ export default {
   name: 'events',
   data() {
     return {
-      events: []
+      allEvents: [], // Список всех событий, полученных с сервера
+      events: [], // Отфильтрованный список событий для отображения
+      page: 1,
+      pageSize: 10,
+      isLoading: false,
+      hasMore: true,
+      totalCount: 0,
+      searchQuery: '',
+      searchCity: ''
     }
   },
   created() {
     this.fetchEvents()
+    window.addEventListener('scroll', this.onScroll)
+  },
+  beforeUnmount() {
+    window.removeEventListener('scroll', this.onScroll)
   },
   methods: {
     async fetchEvents() {
+      if (this.isLoading || !this.hasMore) return
+
+      this.isLoading = true
       try {
-        const response = await axios.get(`${ApiAddress}api/GetAllEvents`)
-        console.log(response.data)
-        this.events = response.data.map((event) => ({
+        const response = await axios.get(`${ApiAddress}api/GetAllEvents`, {
+          params: {
+            page: this.page,
+            pageSize: this.pageSize
+          }
+        })
+        const newEvents = response.data.map((event) => ({
           id: event.id,
           title: event.title,
           image: event.photoPath || '/public/vol-reg-picture.png', // Default image if photoPath is null
@@ -34,9 +53,39 @@ export default {
           city: event.city,
           organizationId: event.organizationId
         }))
+        this.allEvents = [...this.allEvents, ...newEvents]
+        this.filterEvents()
+
+        // Получение общего количества событий из заголовков ответа
+        this.totalCount = parseInt(response.headers['x-total-count'], 10)
+
+        // Проверка, есть ли еще события для загрузки
+        if (this.allEvents.length >= this.totalCount) {
+          this.hasMore = false
+        } else {
+          this.page++
+        }
       } catch (error) {
         console.error('Error fetching events:', error)
+      } finally {
+        this.isLoading = false
       }
+    },
+    filterEvents() {
+      this.events = this.allEvents.filter((event) => {
+        const matchesQuery = event.title.toLowerCase().includes(this.searchQuery.toLowerCase())
+        const matchesCity = event.city.toLowerCase().includes(this.searchCity.toLowerCase())
+        return matchesQuery && matchesCity
+      })
+    },
+    onScroll() {
+      const bottomOfWindow = window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 10
+      if (bottomOfWindow) {
+        this.fetchEvents()
+      }
+    },
+    handleSearch() {
+      this.filterEvents()
     }
   }
 }
@@ -45,24 +94,41 @@ export default {
 <template>
   <div class="body">
     <main>
+      <div class="search-panel">
+        <input
+          type="text"
+          v-model="searchQuery"
+          placeholder="Поиск по событиям.."
+        />
+        <input
+          type="text"
+          v-model="searchCity"
+          placeholder="Поиск по городу.."
+        />
+        <button @click="handleSearch">Поиск</button>
+      </div>
       <div class="secondScreen">
-        <div class="slogan__2 sc__title">Стань волонтером — найди свое призвание</div>
+        <div class="slogan__2 sc__title">
+          Добрые дела рядом с вами
+        </div>
         <div class="event__con">
-          <a v-for="event in events" :key="event.id" @click="$router.push(`/event/${event.id}`)">
-            <!-- <a v-for="event in events" :key="event.id"> -->
+          <a
+            v-for="event in events"
+            :key="event.id"
+            @click="$router.push(`/event/${event.id}`)"
+          >
             <div class="event__block">
-              <!-- TODO: <img :src="event.image" alt="Event image" /> -->
               <img src="/public/vol-reg-picture.png" alt="img" />
               <div class="event__info">
-                <div class="info__title">
-                  {{ event.title }}
-                </div>
-                <div class="info__org">
-                  {{ event.organization }}
-                </div>
+                <div class="info__title">{{ event.title }}</div>
+                <div class="info__org">{{ event.organization }}</div>
                 <div class="event__date">
-                  <div class="info__date">{{ event.startDate }} - {{ event.endDate }}</div>
-                  <div class="info__time">{{ event.startTime }} - {{ event.endTime }}</div>
+                  <div class="info__date">
+                    {{ event.startDate }} - {{ event.endDate }}
+                  </div>
+                  <div class="info__time">
+                    {{ event.startTime }} - {{ event.endTime }}
+                  </div>
                 </div>
               </div>
             </div>
@@ -75,13 +141,12 @@ export default {
 
 <style scoped>
 .body {
-  width: 100vw;
-  /* margin: 0; */
   margin-left: auto;
   margin-right: auto;
-  margin-top: 100px;
+  margin-top: 80px;
   font-family: sans-serif;
   background-color: #f0f8ff;
+  padding: 3%;
 }
 
 /* -&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;style for header&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45; */
@@ -103,6 +168,34 @@ export default {
 header a {
   text-decoration: none; /* Убираем подчеркивание ссылки */
   color: #333333;
+}
+
+.search-panel {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px;
+  margin-top: 20px;
+}
+
+.search-panel input {
+  margin: 0 10px;
+  padding: 10px;
+  font-size: 16px;
+}
+
+.search-panel button {
+  padding: 10px 20px;
+  font-size: 16px;
+  background-color: #00829b;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.search-panel button:hover {
+  background-color: #005f6b;
 }
 
 .menu__item {
@@ -156,7 +249,8 @@ header a {
 .slogan__2 {
   font-size: 32px;
   color: #333333;
-  margin: 2% 0 3% 0;
+  margin: 3% 0 3% 0;
+  font-family: "Bauhaus 93", monospace;
 }
 
 .btn__vol,
@@ -196,12 +290,13 @@ header a {
   text-decoration: none;
   color: black;
   max-width: 20%;
-  margin-right: 1%;
+  margin-left: 3%;
 }
 
 .event__con {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
+  align-items: center;
   flex-wrap: wrap; /* Чтобы те блоки, которые не влезают в строку, опускались вниз */
   /* margin: 2% 0 3% 0; */
 }
@@ -209,11 +304,15 @@ header a {
 .event__block {
   width: 100%;
   display: grid;
-  padding: 3%;
+  padding: 8%;
+  margin-bottom: 10%;
   border-radius: 15px;
   background-color: white;
-  margin-bottom: 10%;
   box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.2);
+  min-width: 300px; /* Минимальная ширина для элемента */
+  min-height: 420px; /* Минимальная высота для элемента */
+  max-height: 421px;
+  max-width: 301px;
 }
 
 .event__block img {
@@ -222,9 +321,10 @@ header a {
 }
 
 .info__title {
-  font-size: 24px;
+  font-size: 18px;
+  font-weight: 500;
+  font-family: Verdana, Arial, Helvetica, sans-serif;
   line-height: 30px; /* Межстрочный интервал */
-  font-weight: 600;
   margin: 5% 0;
 }
 
@@ -246,6 +346,24 @@ header a {
   box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.2);
   text-align: center;
   margin-bottom: 5%;
+}
+
+@media (max-width: 1200px) {
+  .secondScreen a {
+    max-width: 30%;
+  }
+}
+
+@media (max-width: 992px) {
+  .secondScreen a {
+    max-width: 45%;
+  }
+}
+
+@media (max-width: 768px) {
+  .secondScreen a {
+    max-width: 100%;
+  }
 }
 
 /* &#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;style for footer-&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45; */
