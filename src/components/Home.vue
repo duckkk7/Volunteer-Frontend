@@ -15,28 +15,28 @@ export default {
   methods: {
     async fetchEvents() {
       try {
-        const maxEvents = 4; // Максимальное количество событий
+        const maxEvents = 4 // Максимальное количество событий
         const response = await axios.get(`${ApiAddress}api/GetAllEvents`)
         console.log(response.data)
         this.events = response.data
           .slice(0, maxEvents) // Ограничение массива событий до указанного количества
           .map((event) => ({
-          id: event.id,
-          title: event.title,
-          image: event.photoPath || '/public/vol-reg-picture.png', // Default image if photoPath is null
-          startDate: new Date(event.startDate).toLocaleDateString(),
-          startTime: new Date(event.startDate).toLocaleTimeString([], {
-            hour: '2-digit',
-            minute: '2-digit'
-          }),
-          endDate: new Date(event.endDate).toLocaleDateString(),
-          endTime: new Date(event.endDate).toLocaleTimeString([], {
-            hour: '2-digit',
-            minute: '2-digit'
-          }),
-          city: event.city,
-          organizationId: event.organizationId
-        }))
+            id: event.id,
+            title: event.title,
+            image: event.photoPath || '/public/vol-reg-picture.png', // Default image if photoPath is null
+            startDate: new Date(event.startDate).toLocaleDateString(),
+            startTime: new Date(event.startDate).toLocaleTimeString([], {
+              hour: '2-digit',
+              minute: '2-digit'
+            }),
+            endDate: new Date(event.endDate).toLocaleDateString(),
+            endTime: new Date(event.endDate).toLocaleTimeString([], {
+              hour: '2-digit',
+              minute: '2-digit'
+            }),
+            city: event.city,
+            organizationId: event.organizationId
+          }))
       } catch (error) {
         console.error('Error fetching events:', error)
       }
@@ -62,9 +62,7 @@ export default {
       </div>
 
       <div class="secondScreen">
-        <div class="slogan__2 sc__title">
-          Добрые дела рядом с вами
-        </div>
+        <div class="slogan__2 sc__title">Добрые дела рядом с вами</div>
         <div class="event__con">
           <a
             v-for="event in events.slice(0, 4)"
@@ -77,12 +75,8 @@ export default {
                 <div class="info__title">{{ event.title }}</div>
                 <div class="info__org">{{ event.organization }}</div>
                 <div class="event__date">
-                  <div class="info__date">
-                    {{ event.startDate }} - {{ event.endDate }}
-                  </div>
-                  <div class="info__time">
-                    {{ event.startTime }} - {{ event.endTime }}
-                  </div>
+                  <div class="info__date">{{ event.startDate }} - {{ event.endDate }}</div>
+                  <div class="info__time">{{ event.startTime }} - {{ event.endTime }}</div>
                 </div>
               </div>
             </div>
@@ -126,11 +120,11 @@ header a {
   box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.2);
 }
 
-.head__logIn:hover,
+/* .head__logIn:hover,
 .event__btn:hover {
   background-color: #ff4081;
   color: white;
-}
+} */
 
 .head__signIn:hover,
 .menu__item:hover {
@@ -158,14 +152,14 @@ header a {
   font-size: 46px;
   font-weight: 700;
   width: 90%;
-  font-family: "Bauhaus 93", monospace;
+  font-family: 'Bauhaus 93', monospace;
 }
 
 .slogan__2 {
   font-size: 32px;
   color: #333333;
   margin: 0 0 2% 0;
-  font-family: "Bauhaus 93", monospace;
+  font-family: 'Bauhaus 93', monospace;
 }
 
 .btn__vol,

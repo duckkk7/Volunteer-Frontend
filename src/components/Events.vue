@@ -79,7 +79,8 @@ export default {
       })
     },
     onScroll() {
-      const bottomOfWindow = window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 10
+      const bottomOfWindow =
+        window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 10
       if (bottomOfWindow) {
         this.fetchEvents()
       }
@@ -95,40 +96,25 @@ export default {
   <div class="body">
     <main>
       <div class="search-panel">
-        <input
-          type="text"
-          v-model="searchQuery"
-          placeholder="Поиск по событиям.."
-        />
-        <input
-          type="text"
-          v-model="searchCity"
-          placeholder="Поиск по городу.."
-        />
+        <input type="text" v-model="searchQuery" placeholder="Поиск по событиям.." />
+        <input type="text" v-model="searchCity" placeholder="Поиск по городу.." />
         <button @click="handleSearch">Поиск</button>
       </div>
       <div class="secondScreen">
-        <div class="slogan__2 sc__title">
-          Добрые дела рядом с вами
-        </div>
+        <div class="slogan__2 sc__title">Добрые дела рядом с вами</div>
         <div class="event__con">
-          <a
-            v-for="event in events"
-            :key="event.id"
-            @click="$router.push(`/event/${event.id}`)"
-          >
+          <a v-for="event in events" :key="event.id" @click="$router.push(`/event/${event.id}`)">
             <div class="event__block">
-              <img :src="event.photoPath ? `${event.photoPath}` : '/public/vol-reg-picture.png'" alt="img" />
+              <img
+                :src="event.photoPath ? `${event.photoPath}` : '/public/vol-reg-picture.png'"
+                alt="img"
+              />
               <div class="event__info">
                 <div class="info__title">{{ event.title }}</div>
                 <div class="info__org">{{ event.organization }}</div>
                 <div class="event__date">
-                  <div class="info__date">
-                    {{ event.startDate }} - {{ event.endDate }}
-                  </div>
-                  <div class="info__time">
-                    {{ event.startTime }} - {{ event.endTime }}
-                  </div>
+                  <div class="info__date">{{ event.startDate }} - {{ event.endDate }}</div>
+                  <div class="info__time">{{ event.startTime }} - {{ event.endTime }}</div>
                 </div>
               </div>
             </div>
@@ -250,7 +236,7 @@ header a {
   font-size: 32px;
   color: #333333;
   margin: 3% 0 3% 0;
-  font-family: "Bauhaus 93", monospace;
+  font-family: 'Bauhaus 93', monospace;
 }
 
 .btn__vol,
@@ -261,12 +247,6 @@ header a {
   border: 1px solid #00829b;
   text-decoration: none;
   margin-right: 25px;
-}
-
-.btn__vol,
-.btn__org:hover {
-  background-color: #00829b;
-  color: white;
 }
 
 .btn__org,
