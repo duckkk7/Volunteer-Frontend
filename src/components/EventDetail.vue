@@ -172,19 +172,19 @@ export default {
         console.error('Error rejecting application:', error)
       }
     },
-    async deleteEvent() {
-      try {
-        const token = Cookies.get('authToken')
-        await axios.delete(`${ApiAddress}api/Delete/${this.model.id}`, {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        })
-        this.$router.push('/events')
-      } catch (error) {
-        console.error('Error deleting event:', error)
-      }
-    },
+    // async deleteEvent() {
+    //   try {
+    //     const token = Cookies.get('authToken')
+    //     await axios.delete(`${ApiAddress}api/Delete/${this.model.id}`, {
+    //       headers: {
+    //         Authorization: `Bearer ${token}`
+    //       }
+    //     })
+    //     this.$router.push('/events')
+    //   } catch (error) {
+    //     console.error('Error deleting event:', error)
+    //   }
+    // },
     async editEvent(eventId) {
       try {
         this.$router.push(`/event/${eventId}/edit`)
@@ -241,7 +241,7 @@ export default {
           <div v-if="userRole === 'Organization'">
             <button class="blue-button" @click="editEvent(model.id)">Редактировать</button>
             <br />
-            <button class="red-button" @click="deleteEvent">Удалить событие</button>
+            <!-- <button class="red-button" @click="deleteEvent">Удалить событие</button> -->
           </div>
           <div class="div-wrapper">
             <!-- <input class="form-control" type="text" v-model="model.firstName" /> -->

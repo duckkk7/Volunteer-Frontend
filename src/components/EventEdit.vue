@@ -42,6 +42,7 @@
             </div>
 
             <button class="publish-button">Сохранить изменения</button>
+            <button class="red-button" @click="deleteEvent">Удалить событие</button>
           </form>
         </div>
       </div>
@@ -147,6 +148,19 @@ export default {
             life: 3000
           })
         }
+      }
+    },
+    async deleteEvent() {
+      try {
+        const token = Cookies.get('authToken')
+        await axios.delete(`${ApiAddress}api/Delete/${this.model.id}`, {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        })
+        this.$router.push('/events')
+      } catch (error) {
+        console.error('Error deleting event:', error)
       }
     }
   }
@@ -295,5 +309,29 @@ export default {
   width: 500px;
   height: 700px;
   object-fit: contain;
+}
+
+.red-button {
+  align-items: center;
+  align-self: stretch;
+  background-color: #da235a;
+  border-radius: 10px;
+  border: 0;
+  box-shadow: 0 4px 4px #00000040;
+  display: flex;
+  flex: 0 0 auto;
+  gap: 8px;
+  justify-content: center;
+  overflow: hidden;
+  padding: 12px 24px;
+  position: relative;
+  width: 100%;
+  color: #f5f5f5;
+  font-family: sans-serif;
+  font-size: 18px;
+  font-weight: 400;
+  letter-spacing: 0;
+  line-height: 24px;
+  white-space: nowrap;
 }
 </style>
